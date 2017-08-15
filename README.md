@@ -10,4 +10,4 @@
 *       pElem 父元素的className   如 ".option"
 *       cElem 子元素(要拖拽的元素)的className 如 ".option-list"
 *       style 被点击拖动的元素的样式
-* */
+* 
