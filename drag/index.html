@@ -18,6 +18,7 @@
             width:200px;
         }
         li {
+            margin-top: 10px;
             width:200px;
             height:30px;
             line-height: 30px;
@@ -25,7 +26,9 @@
             padding:0 5px;
             border:1px solid #ccc;
             cursor:pointer;
-            background: #fff;
+            background: #F6F8FA;
+            border: 1px solid #D3D9E0;
+            border-radius: 2px;
         }
         li:hover {
             background:lightskyblue;
@@ -44,7 +47,7 @@
 </body>
 <script>
     $(function(){
-        $.KF_drag(".options",".option-list",{'border-color':'#1F8CEB','background':'red'});
+        $.KF_drag(".options",".option-list",{'border-color':'#1F8CEB','background':'green'});
     })
 </script>
 </html>
