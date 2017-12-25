@@ -16,8 +16,7 @@ jQuery.extend({
                 if ($(pElem).css('position') == 'static') $(pElem).css("position", 'relative');
                 $(pElem).on("mousedown", cElem, function (e) {  
                     e.stopPropagation();
-                    var e_this=e.target.nodeName;  
-                    if(e_this=="I" || e_this=="SPAN")  return;   
+                      
                     $body = $(this).parent();    
                     if($body.find(cElem).length<=1) return;  
                     var obj = $(this).clone(true),
