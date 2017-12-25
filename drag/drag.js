@@ -33,7 +33,7 @@ jQuery.extend({
                     $(this).replaceWith("<"+tagName+" id='drag-plugin-move-div' style='border:2px dotted #1F8CEB' ></"+tagName+">");
                     $("#drag-plugin-move-div").css({ "height": HEIGHT, "width": WIDTH, 'margin': MARGIN });
                     if (style1) {
-                        $("#drag-plugin-move-div").css(style);
+                        $("#drag-plugin-move-div").css(style1);
                     }
                     if (style2) {
                         obj.css(style2);
