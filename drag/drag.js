@@ -23,14 +23,14 @@ jQuery.extend({
                         onOff = false,
                         cache = $(this),
                         HEIGHT = $(this).outerHeight(),
-                        WIDTH = $(this).outerWidth()-5,
+                        WIDTH = $(this).outerWidth(),
                         MARGIN = $(this).css('margin'),
                         XXX = e.pageX - $(this).offset().left,
                         YYY = e.pageY - $(this).offset().top,
                         tagName = $( this ).get(0).tagName.toLowerCase() || 'div';
                     obj.css({'height':HEIGHT,'width':WIDTH, 'position': "absolute", top: $(this).position().top, "left": $(this).position().left });
                     $(this).parent().css("position", "relative");
-                    $(this).replaceWith("<"+tagName+" id='drag-plugin-move-div' style='border:2px dotted #1F8CEB' ></"+tagName+">");
+                    $(this).replaceWith("<"+tagName+" id='drag-plugin-move-div' style='box-sizing:border-box;border:2px dotted #1F8CEB' ></"+tagName+">");
                     $("#drag-plugin-move-div").css({ "height": HEIGHT, "width": WIDTH, 'margin': MARGIN });
                     if (style1) {
                         $("#drag-plugin-move-div").css(style1);
