@@ -1,15 +1,2 @@
-# plugin
-在线预览 https://zhouatie.github.io/plugin/drag/index.html
-
-插件还有很多功能可以扩展，希望以后有时间会慢慢的完善
-本插件目前只支持垂直排列拖动
-
- 说明：本插件基于jquery
- 
- $.KF_drag(pElem,cElem,style); 如：上面index.html 的传参$.KF_drag(".options",".option-list",{'border-color':'#1F8CEB','background':'red'});
- 
- 1.传参
-*       pElem 父元素的className   如 ".option"
-*       cElem 子元素(要拖拽的元素)的className 如 ".option-list"
-*       style 被点击拖动的元素的样式 如 {'border-color':'#1F8CEB','background':'red'}
-
+#插件
+因为不太喜欢别人写的插件，有些时候只需要某个插件里面的某一个功能却需要引入整个庞大的插件，所以以后会持续添加自己写的插件。
