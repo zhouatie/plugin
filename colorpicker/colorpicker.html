@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>colorpicker</title>
+    <link rel="stylesheet" href="./colorpicker.css">
+    <script src="./colorpicker.js"></script>
+    <style>
+        #picker {
+            width:20px;
+            height:20px;
+            background:#000;
+            cursor:pointer;
+        }
+    </style>
+</head>
+<body>
+    <!-- <div class="colorpicker-wrap">
+        <div class="color-panels">
+            <div class="main-panel">
+                <div class="color-mask1">
+                    <div class="color-mask2">
+                        <div class="colorpicker-btn-outer">
+                            <div class="colorpicker-btn-inner"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="bar-panel">
+                <div class="bar-panel-btn">
+                    <div class="bar-panel-btn-left"></div>
+                    <div class="bar-panel-btn-right"></div>
+                </div>
+            </div>
+        </div>
+        <div class="color-input-wrap">
+            <div class="color-input-hex-wrap">
+                <span class="show-hexcolor"></span>
+                <input type="text" value="123456" maxlength="6" size="6">
+            </div>
+            <div class="opacity-input-wrap">
+                <span class="arrow-left"></span>
+                <input type="text" value="100">
+                <span class="arrow-right"></span>
+            </div>
+        </div>
+        <div class="color-cards">
+            <div class="color-card"></div>
+            <div class="color-card"></div>
+            <div class="color-card"></div>
+            <div class="color-card"></div>
+        </div>
+    </div> -->
+
+    <div id="picker"></div>
+</body>
+<script>
+    var obj = document.getElementById("picker");
+    colorpicker.create({
+        elem:obj,
+        cards:["#fff","#000","#ccc",'#ff0000','#00ff00'],
+        afterCreat:function(){alert(666)}
+    })
+</script>
+</html>
