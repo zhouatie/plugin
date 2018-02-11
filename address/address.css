@@ -1,0 +1,75 @@
+#wrap * {
+    margin:0;
+    padding:0;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    font-size:0;
+}
+#wrap ul,li {
+    list-style: none;
+}
+#wrap .address-position {
+    position: relative;
+    width: 100px;
+    height: 28px;
+    display: inline-block;
+    margin-right: 10px;
+}
+#wrap .address-position.address-disabled {
+    pointer-events: none;
+    opacity: 0.4;
+    filter:Alpha(opacity=40);
+}
+#wrap .address-btn {
+    position: relative;
+    left:0;
+    top:0;
+    width:100%;
+    height:100%;
+    padding-left: 5px;
+    cursor: pointer;
+    background: #FFFFFF;
+    border: 1px solid #D3D9E0;
+    border-radius: 2px;
+    line-height: 26px;
+    font-size:12px;
+}
+#wrap .address-btn:after {
+    content: '';
+    height: 0;
+    width: 0;
+    position: absolute;
+    right: 5px;
+    top: 10px;
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-top: 5px solid #466080;
+    border-bottom: none;
+}
+#wrap .address-position.isDown .address-btn:after {
+    border-top:none;
+    border-bottom: 5px solid #466080;
+}
+#wrap .address-lists {
+    background: #fff;
+    display: none;
+    padding: 5px 0;
+    position: absolute;
+    top: 29px;
+    left: 0;
+    width: 100%;
+    border: 1px solid #D3D9E0;
+    z-index: 10;
+    max-height: 140px;
+    overflow: auto;
+}
+#wrap .address-list {
+    height:24px;
+    padding-left: 5px;
+    line-height: 24px;
+    font-size:12px;
+    cursor: pointer;
+}
+#wrap .address-list:hover,#wrap .address-list.active {
+    background: #E7F4FD;
+}
