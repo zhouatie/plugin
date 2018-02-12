@@ -1,26 +1,25 @@
-#wrap * {
+.address-contain * {
     margin:0;
     padding:0;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
     font-size:0;
 }
-#wrap ul,li {
+.address-contain ul,li {
     list-style: none;
 }
-#wrap .address-position {
+.address-contain .address-position {
     position: relative;
     width: 100px;
     height: 28px;
     display: inline-block;
-    margin-right: 10px;
 }
-#wrap .address-position.address-disabled {
+.address-contain .address-position.address-disabled {
     pointer-events: none;
     opacity: 0.4;
     filter:Alpha(opacity=40);
 }
-#wrap .address-btn {
+.address-contain .address-btn {
     position: relative;
     left:0;
     top:0;
@@ -34,7 +33,7 @@
     line-height: 26px;
     font-size:12px;
 }
-#wrap .address-btn:after {
+.address-contain .address-btn:after {
     content: '';
     height: 0;
     width: 0;
@@ -46,11 +45,11 @@
     border-top: 5px solid #466080;
     border-bottom: none;
 }
-#wrap .address-position.isDown .address-btn:after {
+.address-contain .address-position.isDown .address-btn:after {
     border-top:none;
     border-bottom: 5px solid #466080;
 }
-#wrap .address-lists {
+.address-contain .address-lists {
     background: #fff;
     display: none;
     padding: 5px 0;
@@ -63,13 +62,13 @@
     max-height: 140px;
     overflow: auto;
 }
-#wrap .address-list {
+.address-contain .address-list {
     height:24px;
     padding-left: 5px;
     line-height: 24px;
     font-size:12px;
     cursor: pointer;
 }
-#wrap .address-list:hover,#wrap .address-list.active {
+.address-contain .address-list:hover,.address-contain .address-list.active {
     background: #E7F4FD;
 }
