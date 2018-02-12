@@ -41,14 +41,14 @@
             element.className = classNames.join(' ');
         },
         hasClass: function(element, className){
-            if(!element.className) return -1;
+            if(!element.className) return false;
             var classNames = element.className.split(/\s+/);
             return util.indexOf(classNames, className) != -1;
         },
         parents: function(elem,pClass){ // 递归函数通过父亲的classname获取元素
 
             var parent = elem.parentNode;
-            if(parent===document) return false;
+            if(parent===document) return null;
             if( !this.hasClass(parent,pClass)) parent = this.parents(parent,pClass);
             return parent;
         },
@@ -152,12 +152,13 @@
             }
 
             this.elem_contain.innerHTML = html;
-
+            util.addClass(this.elem_contain,"address-contain");
             this.elem_contain.onclick = function(e){
                 e = e || window.event;
 
-                var target = e.target,
-                    parent = util.parents(target,"address-position"),
+                var target = e.target;
+                if(target === this) return;
+                var parent = util.parents(target,"address-position"),
                     parent_id = parent.getAttribute("id"),
                     ul = parent.children[1],
                     tag = target.tagName.toLowerCase();
