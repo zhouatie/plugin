@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="./preview.js"></script>
+    <title>预览缩放图片</title>
+    <style>
+    html,body {
+        height:100%;
+    }
+    * {
+        margin:0;
+        padding:0;
+    }
+    img {
+      width:200px;
+    }
+    .close_bgmask {
+      transition: transform .5s;
+    }
+    .close_bgmask:hover {
+      transform: scale(1.2);
+    }
+    .close_bgmask:after {
+      content:"";
+      position:absolute;
+      left:50%;
+      top:50%;
+      width:36px;
+      height:6px;
+      margin-left:-18px;
+      margin-top:-3px;
+      transform: rotateZ(45deg);
+      background-color: #fff;
+    }
+    .close_bgmask:before {
+      content:"";
+      position:absolute;
+      left:50%;
+      top:50%;
+      width:36px;
+      height:6px;
+      margin-left:-18px;
+      margin-top:-3px;
+      transform: rotateZ(-45deg);
+      background-color: #fff;
+    }
+    </style>
+</head>
+<body>
+    <div id="wrap">
+        <div>
+            <img src="./data/girl1.jpg" alt="" />
+        </div>
+        <img src="./data/girl2.jpg" alt="" />
+        <img src="./data/girl3.jpg" alt="">
+    </div>
+<script>
+    var preview = new Preview({
+        imgWrap: 'wrap' // 指定该容器里的图片点击预览
+    })
+
+</script>
+</body>
+</html>

@@ -1,0 +1,47 @@
+
+.img_bgmask {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,.6);
+    filter: progid:DXImageTransform.Microsoft.gradient(startcolorstr=#19000000,endcolorstr=#19000000);
+    z-index: 1000;
+    text-align:center;
+    display:none;
+}
+/* .img_bgmask:before {
+    content:"";
+    vertical-align: middle;
+    display: inline-block;
+    height:100%;
+} */
+
+.img_bgmask .view_img_wrap {
+    position: absolute;
+    left:50%;
+    top:50%;
+    width:100%;
+    vertical-align: middle;
+    cursor:zoom-out;
+    cursor:-webkit-zoom-out;
+}
+.img_bgmask .view_img_wrap img {
+    width:100%;
+    height:100%;
+    position: relative;
+    z-index: -1;
+}
+.img_bgmask .close_bgmask {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    z-index: 10;
+    height: 48px;
+    width: 48px;
+    background: url(../image/png/close_bgmask.png?1);
+}
+.img_bgmask .close_bgmask:hover {
+    background: url(../image/png/close_bgmask_hover.png);
+}
