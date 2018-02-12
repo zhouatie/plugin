@@ -5,7 +5,7 @@
 
 > [仓库地址](https://github.com/zhouatie/plugin/tree/master/previewImg)
 
-> [在线预览](https://zhouatie.github.io/plugin/address/preview.html)
+> [在线预览](https://zhouatie.github.io/plugin/previewImg/preview.html)
 
 ## 准备
 1. 引入preview.js文件
