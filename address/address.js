@@ -41,12 +41,12 @@
             element.className = classNames.join(' ');
         },
         hasClass: function(element, className){
-            if(!element.className) return false;
+            if(!element || !element.className) return false;
             var classNames = element.className.split(/\s+/);
             return util.indexOf(classNames, className) != -1;
         },
         parents: function(elem,pClass){ // 递归函数通过父亲的classname获取元素
-
+            if( !elem ) return null;
             var parent = elem.parentNode;
             if(parent===document) return null;
             if( !this.hasClass(parent,pClass)) parent = this.parents(parent,pClass);
