@@ -31,9 +31,8 @@ var pickerView = new PickerView({
     }
 });
 ```
-> 字段介绍如上注释，滚轮的数量取决于你json嵌套的层数；
+> 字段介绍如上注释，滚轮的数量取决于你json嵌套的层数。如下：
 
-如：
 
 ```javascript
 var data = [1,2,3]
@@ -53,8 +52,8 @@ var data = {
 
 
 ### 案例
-html:
 ```html
+<!-- html -->
 <button style="font-size:50px;" id="btn">按钮</button>
 <div class="showText"></div>
 ```
@@ -62,8 +61,9 @@ html:
 
 > div标签用来展示选择的内容
 
-js:
 ```javaScript
+//js
+
 // var data = 地级市json数据，过大 就不展示了
 
 var data = {
