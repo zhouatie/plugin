@@ -1,5 +1,4 @@
 // created by zhouatie
-
 (function() {
     var util = {
         extend: function(target) {
