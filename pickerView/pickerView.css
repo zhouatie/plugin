@@ -17,7 +17,7 @@
     background:rgba(0,0,0,.4);
 }
 .pickerView-box {
-    height:50%;
+    height:40%;
     width:100%;
     position: absolute;
     left:0;
@@ -48,20 +48,35 @@
     top:0;
     color:#108ee9;
 }
-.pickerView-box-header-cancel {
+.pickerView-box-header-left {
     left:0;
 }
-.pickerView-box-header-save {
+.pickerView-box-header-right {
     right:0;
 }
 .pickerView-box-header-title {
     text-align: center;
     height:100%;
     width:100%;
+    overflow:hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
-.pickerView-box-content {
+.pickerView-box-content-wrap {
     height:100%;
     width:100%;
+    overflow: hidden;
+    position: relative;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+}
+.pickerView-box-content {
+    -webkit-box-flex: 1;
+    -webkit-flex: 1;
+    -ms-flex: 1;
+    flex: 1;
     position: relative;
 }
 .pickerView-box-content-mask {
