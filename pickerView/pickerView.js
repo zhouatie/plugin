@@ -90,8 +90,9 @@
         this.elem_leftBtn = null; // 左按钮元素
         this.elem_rightBtn = null; // 右按钮元素
         this.elem_contents = null; // items容器
+        this.elem_mask = null; // 黑色背景
 
-        this.selectArr = [] // 选项对应的元素序列号 如：[0,0,0] or ['浙江','杭州','西湖区']
+        this.selectArr = [] // 选项对应的元素序列号 如：[0,0,0]
 
         this.init();
 
@@ -115,8 +116,8 @@
         },
         getItemsTpl: function(keys) {
             this.selectArr.push(0);
-            var html = "";
-            var item_html = this.getItemTpl(keys);
+            var html = "",
+                item_html = this.getItemTpl(keys);
 
             html += '<div index="' + (this.selectArr.length - 1) + '" class="pickerView-box-content">' +
                 '<div style="background-size:100% ' + this.padding + 'px;" class="pickerView-box-content-mask"></div>' +
@@ -129,9 +130,10 @@
             return html;
         },
         renderItems: function(obj) {
-            var html = "";
-            var arr = obj;
-            var isObj = util.isObj(obj);
+            var html = "",
+                arr = obj,
+                isObj = util.isObj(obj);
+
             if (isObj) arr = Object.keys(obj);
             html += this.getItemsTpl(arr);
             if (isObj) html += this.renderItems(obj[arr[0]]);
@@ -139,7 +141,7 @@
             return html;
         },
         getTpl: function() {
-            var html = '<div class="pickerView-box">' +
+            var html = '<div class="pickerView-mask"></div><div class="pickerView-box">' +
                 '<div class="pickerView-box-header">' +
                 '<div class="pickerView-box-header-left pickerView-box-header-btn">取消</div>' +
                 '<div class="pickerView-box-header-title">' + this.Opt.title + '</div>' +
@@ -153,15 +155,17 @@
             return html;
         },
         init: function() {
-            var _this = this;
-            var body = document.getElementsByTagName("body")[0];
-            var div = document.createElement("div");
+            var _this = this,
+                body = document.getElementsByTagName("body")[0],
+                div = document.createElement("div");
+
             div.className = "pickerView-wrap";
             this.elem_wrap = div;
             this.padding = (document.documentElement.clientHeight * 0.4 - PickerView.defaultOpt.headerHeight - PickerView.defaultOpt.itemHeight) / 2;
             div.innerHTML = this.getTpl();
             body.appendChild(div);
 
+            this.elem_mask = this.elem_wrap.getElementsByClassName("pickerView-mask")[0];
             this.elem_contents = this.elem_wrap.getElementsByClassName("pickerView-box-content-wrap")[0];
             this.elem_leftBtn = this.elem_wrap.getElementsByClassName("pickerView-box-header-left")[0];
             this.elem_rightBtn = this.elem_wrap.getElementsByClassName("pickerView-box-header-right")[0];
@@ -169,28 +173,45 @@
             this.elem_contents.addEventListener("touchstart", function(e) {
                 _this.moveObj = util.parents(e.target, "pickerView-box-content").children[2];
                 _this.touchstart(e);
+                e.stopPropagation();
             }, false);
             this.elem_contents.addEventListener("touchmove", function(e) {
                 _this.touchmove(e);
+                e.stopPropagation();
+                e.preventDefault();
             }, false);
             this.elem_contents.addEventListener("touchend", function(e) {
                 _this.touchend(e);
+                e.stopPropagation();
             }, false);
-            this.elem_rightBtn.addEventListener("touchend", function() {
+            this.elem_mask.addEventListener("touchend", function(e) {
+                _this.closeComponent();
+                e.stopPropagation();
+                e.preventDefault()
+            }, false);
+            this.elem_leftBtn.addEventListener("touchend", function(e) {
+                _this.closeComponent();
+                e.stopPropagation();
+                e.preventDefault()
+            }, false);
+            this.elem_rightBtn.addEventListener("touchend", function(e) {
                 var selectArr = [];
                 for (var i = 0; i < _this.elem_contents.children.length; i++) {
-                    var items = _this.elem_contents.children[i].getElementsByClassName("pickerView-items")[0];
-                    var field = items.children.length > 0 ? items.children[items.getAttribute("fieldIndex")].innerText : "";
+                    var items = _this.elem_contents.children[i].getElementsByClassName("pickerView-items")[0],
+                        field = items.children.length > 0 ? items.children[items.getAttribute("fieldIndex")].innerText : "";
+
                     selectArr.push(field);
                 }
                 _this.Opt.rightFn(selectArr);
-            });
+                _this.closeComponent();
+                e.stopPropagation();
+                e.preventDefault()
+            }, false);
         },
         touchstart: function(e) {
             this._y_start = e.touches[0].pageY;
             this.isMove = false;
             this.top_start = parseInt(this.moveObj.style.transform.split(",")[1]);
-
         },
         touchmove: function(e) {
             var _this = this;
@@ -203,44 +224,44 @@
             this.top_end = len;
         },
         touchend: function(e) {
-            var _this = this;
-            var itemHeight = PickerView.defaultOpt.itemHeight;
-            var sign = this.top_end >= 0 ? 1 : -1;
-            var index = this.moveObj.parentNode.getAttribute("index");
-            var fieldIndex = Math.round(Math.abs(this.top_end) / itemHeight);
-            var len = sign * (fieldIndex * itemHeight);
+            if (!this.isMove) return;
+            this.isMove = false;
 
-            this.selectArr[index] = fieldIndex;
+            var _this = this,
+                itemHeight = PickerView.defaultOpt.itemHeight,
+                sign = this.top_end >= 0 ? 1 : -1,
+                index = this.moveObj.parentNode.getAttribute("index"),
+                fieldIndex = Math.round(Math.abs(this.top_end) / itemHeight),
+                len = sign * (fieldIndex * itemHeight);
 
             if (len > 0) {
                 len = 0;
-                this.moveObj.setAttribute("fieldIndex", 0);
+                fieldIndex = 0;
             } else if (len < -(this.moveObj.children.length - 1) * itemHeight) {
                 len = -(this.moveObj.children.length - 1) * itemHeight;
-                this.moveObj.setAttribute("fieldIndex", this.moveObj.children.length - 1);
-            } else {
-                this.moveObj.setAttribute("fieldIndex", fieldIndex);
-            }
+                fieldIndex = this.moveObj.children.length - 1;
+            };
 
-            if (this.isMove) {
-                this.isMove = false;
-                this.moveObj.style.transition = "0.3s cubic-bezier(0,0,0.2,1.15)";
-                util.css(_this.moveObj, {
-                    "transform": 'translate3d(0,' + len + 'px,0)'
-                });
-                _this.changeNext(index);
-                _this.moveObj.addEventListener("transitionend", function(event) {
-                    _this.moveObj.style.transition = "";
-                }, false);
-                _this.moveObj.addEventListener("webkitTransitionEnd", function(event) {
-                    _this.moveObj.style.transition = "";
-                }, false);
+            this.selectArr[index] = fieldIndex;
+            this.moveObj.setAttribute("fieldIndex", fieldIndex);
 
-            }
+            this.moveObj.style.transition = "0.3s cubic-bezier(0,0,0.2,1.15)";
+            util.css(_this.moveObj, {
+                "transform": 'translate3d(0,' + len + 'px,0)'
+            });
+            _this.changeNext(index);
+            _this.moveObj.addEventListener("transitionend", function(event) {
+                _this.moveObj.style.transition = "";
+            }, false);
+            _this.moveObj.addEventListener("webkitTransitionEnd", function(event) {
+                _this.moveObj.style.transition = "";
+            }, false);
+
         },
         changeNext: function(index) {
-            var data = this.Opt.data;
-            var arr = [];
+            var data = this.Opt.data,
+                arr = [];
+
             for (var i = 0; i < this.selectArr.length; i++) {
                 var elem_items = this.elem_contents.children[i].children[2];
 
@@ -257,6 +278,10 @@
                     data = data[field];
                 }
             }
+        },
+        closeComponent: function(){
+          var body = document.getElementsByTagName("body")[0];
+          body.removeChild(this.elem_wrap);
         }
     }
 

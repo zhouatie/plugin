@@ -1,3 +1,36 @@
+
+@keyframes slideUp {
+  0% {
+    bottom:-40%;
+  }
+  100% {
+    bottom:0;
+  }
+}
+@-moz-keyframes slideUp {
+  0% {
+    bottom:-40%;
+  }
+  100% {
+    bottom:0;
+  }
+}
+@-webkit-keyframes slideUp {
+  0% {
+    bottom:-40%;
+  }
+  100% {
+    bottom:0;
+  }
+}
+@-o-keyframes slideUp {
+  0% {
+    bottom:-40%;
+  }
+  100% {
+    bottom:0;
+  }
+}
 .pickerView-wrap * {
     margin:0;
     padding:0;
@@ -14,6 +47,10 @@
     top:0;
     height:100%;
     width:100%;
+}
+.pickerView-mask {
+    height:100%;
+    width:100%;
     background:rgba(0,0,0,.4);
 }
 .pickerView-box {
@@ -24,6 +61,7 @@
     bottom:0;
     background: #fff;
     padding-top:45px;
+    animation: slideUp 0.3s;
 }
 .pickerView-box-header {
     text-align: center;
@@ -122,6 +160,7 @@
     height: 34px;
     line-height: 34px;
     color: #000;
+    overflow:hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
 }
