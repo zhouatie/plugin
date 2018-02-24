@@ -8,7 +8,7 @@
 
 
 ### 预览
-![省市区](https://github.com/zhouatie/plugin/raw/master/pickerView/data/shengshiqu.gif)
+![省市区](https://github.com/zhouatie/plugin/raw/master/pickerView/data/ppickerView.gif)
 
 ### 准备
 首先在页面中引入css,js文件
@@ -27,8 +27,7 @@ var pickerView = new PickerView({
     leftText: '取消', // 头部左侧按钮文本 默认为‘取消’
     rightText: '确定', // 头部右侧按钮文本 默认为“确定”
     rightFn: function( selectArr ){  // 点击头部右侧按钮的回调函数，参数为一个数组，数组对应滚轮中每项对应的值
-        console.log(selectArr,'selectarr');
-        document.querySelector(".showText").innerText = selectArr.join("-");
+
     }
 });
 ```
@@ -48,7 +47,7 @@ var pickerView = new PickerView({
 ![省市区](https://github.com/zhouatie/plugin/raw/master/pickerView/data/shengshiqu.gif)
 
 ### 案例
-
+html:
 ```html
 <button style="font-size:50px;" id="btn">按钮</button>
 <div class="showText"></div>
@@ -57,6 +56,7 @@ var pickerView = new PickerView({
 
 > div标签用来展示选择的内容
 
+js:
 ```javaScript
 // var data = 地级市json数据，过大 就不展示了
 
@@ -79,6 +79,7 @@ btn.onclick = function(){
       rightText: '确定',
       rightFn: function( selectArr ){
           console.log(selectArr,'selectarr');
+          // 将家庭成员展示到showText类名的div中
           document.querySelector(".showText").innerText = selectArr.join("-");
       }
   });
