@@ -8,7 +8,7 @@
 
 
 ### 预览
-![省市区](./data/pickerView.gif)
+![省市区](https://github.com/zhouatie/plugin/raw/master/pickerView/data/pickerView.gif)
 
 ### 准备
 首先在页面中引入css,js文件
@@ -35,16 +35,22 @@ var pickerView = new PickerView({
 
 如：
 
-`var data = [1,2,3]`
-![省市区](https://github.com/zhouatie/plugin/raw/master/pickerView/data/shengshiqu.gif)
+```javascript
+var data = [1,2,3]
+```
+
+![data1](https://github.com/zhouatie/plugin/raw/master/pickerView/data/img1.png)
 
 
-`var data = [1,2,3]`
-![省市区](https://github.com/zhouatie/plugin/raw/master/pickerView/data/shengshiqu.gif)
+```javaScript
+var data = {
+    "小明家":["小明爸爸","小明妈妈","小明爷爷","小明奶奶","小明爸爸","小明妈妈","小明爷爷","小明奶奶"],
+    "小红家":["小红爸爸","小红妈妈"]
+}
+```
+![data2](https://github.com/zhouatie/plugin/raw/master/pickerView/data/img2.png)
 
 
-`var data = [1,2,3]`
-![省市区](https://github.com/zhouatie/plugin/raw/master/pickerView/data/shengshiqu.gif)
 
 ### 案例
 html:
@@ -86,7 +92,8 @@ btn.onclick = function(){
 }
 ```
 > 说明： 每次显示组件的时候都需要new一个实例，如上button标签每次被点击的时候都new一个。效果如下：
-![预览](https://github.com/zhouatie/plugin/raw/master/pickerView/data/shengshiqu.gif)
+
+![预览](https://github.com/zhouatie/plugin/raw/master/pickerView/data/img4.png)
 
 ## 结尾
 如有什么功能需要增加的，可在评论区留言，我尽量满足。如有什么疏忽或错误，希望您指出。我会尽早修改，以免误导他人。
