@@ -202,8 +202,8 @@
             this.elem_rightBtn.addEventListener("touchend", function(e) {
                 var selectArr = [];
                 for (var i = 0; i < _this.elem_contents.children.length; i++) {
-                    var items = _this.elem_contents.children[i].getElementsByClassName("pickerView-items")[0],
-                        field = items.children.length > 0 ? items.children[items.getAttribute("fieldIndex")].innerText : "";
+                    var items = _this.elem_contents.children[i].children[2],
+                        field = items.children.length > 0 ? items.children[_this.selectArr[i]].innerText : "";
 
                     selectArr.push(field);
                 }
