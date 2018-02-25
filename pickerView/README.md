@@ -22,6 +22,7 @@ var data = {
     }
 }
 var pickerView = new PickerView({
+    bindElem: elem, // 绑定的元素,用于区别多个组件存在时回显区别，如果单个可以随意填某个元素
     data: data, // 说明：该参数必须符合json格式 且最里层是个数组，如上面的data变量所展示的[3,4]。
     title: '标题2', // 顶部标题文本 默认为“标题”
     leftText: '取消', // 头部左侧按钮文本 默认为‘取消’
@@ -79,6 +80,7 @@ var data = {
 var btn = document.getElementById("btn");
 btn.onclick = function(){
   var pickerView = new PickerView({
+      bindElem: btn,
       data: data,
       title: '家庭',
       leftText: '取消',
