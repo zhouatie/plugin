@@ -4569,6 +4569,7 @@
         var btn = document.getElementById("btn");
         btn.onclick = function(){
           var pickerView = new PickerView({
+            bindElem: btn, // 绑定的元素
             data: data, // 说明：该参数必须符合json格式 且最里层是个数组，如上面的data变量所展示的[3,4]。
             title: '省市区联动', // 顶部标题文本 默认为“标题”
             leftText: '取消', // 头部左侧按钮文本 默认为‘取消’

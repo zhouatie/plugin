@@ -91,7 +91,9 @@
         this.elem_contents = null; // items容器
         this.elem_mask = null; // 黑色背景
 
-        this.selectArr = [] // 选项对应的元素序列号 如：[0,0,0]
+        var selectcache = this.Opt.bindElem.getAttribute("selectcache");
+        this.selectcache = selectcache? selectcache.split(","):[];
+        this.selectArr = []; // 选项对应的元素序列号 如：[0,0,0]
 
         this.init();
 
@@ -114,14 +116,16 @@
             return item_html;
         },
         getItemsTpl: function(keys) {
-            this.selectArr.push(0);
+            var fieldIndex = this.selectcache[this.selectArr.length]? this.selectcache[this.selectArr.length]:0;
+            this.selectArr.push( fieldIndex );
             var html = "",
+                len = -fieldIndex*PickerView.defaultOpt.itemHeight,
                 item_html = this.getItemTpl(keys);
 
             html += '<div index="' + (this.selectArr.length - 1) + '" class="pickerView-box-content">' +
                 '<div style="background-size:100% ' + this.padding + 'px;" class="pickerView-box-content-mask"></div>' +
                 '<div style="top:' + this.padding + 'px;" class="pickerView-box-content-indicator"></div>' +
-                '<div style="padding:' + this.padding + 'px 0;transform:translate3d(0,0,0)" fieldIndex="0" class="pickerView-items">' +
+                '<div style="padding:' + this.padding + 'px 0;transform:translate3d(0,'+ len +'px,0)" fieldIndex="0" class="pickerView-items">' +
                 item_html +
                 '</div>' +
                 '</div>';
@@ -129,13 +133,15 @@
             return html;
         },
         renderItems: function(obj) {
-            var html = "",
+            var _this = this,
+                html = "",
                 arr = obj,
                 isObj = util.isObj(obj);
 
             if (isObj) arr = Object.keys(obj);
             html += this.getItemsTpl(arr);
-            if (isObj) html += this.renderItems(obj[arr[0]]);
+            var fieldIndex = this.selectArr[this.selectArr.length-1];
+            if (isObj) html += this.renderItems(obj[arr[fieldIndex]]);
 
             return html;
         },
@@ -203,6 +209,8 @@
                 }
                 _this.Opt.rightFn(selectArr);
                 _this.closeComponent();
+                // 绑定元素
+                _this.Opt.bindElem.setAttribute("selectcache",_this.selectArr);
                 e.stopPropagation();
                 e.preventDefault()
             }, false);
@@ -268,6 +276,7 @@
                     util.css(elem_items, {
                         "transform": 'translate3d(0,0,0)'
                     });
+                    this.selectArr[i] = 0;
                     arr = util.isObj(data)? Object.keys(data):data;
                     elem_items.innerHTML = this.getItemTpl(arr);
                     var field = arr[0];
