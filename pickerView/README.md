@@ -8,7 +8,7 @@
 
 
 ### 预览
-![省市区](https://github.com/zhouatie/plugin/raw/master/pickerView/data/pickerView.gif)
+![省市区](https://github.com/zhouatie/plugin/raw/master/pickerView/data/pickerView2.gif)
 
 ### 准备
 首先在页面中引入css,js文件
