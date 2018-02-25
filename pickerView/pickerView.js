@@ -214,6 +214,7 @@
                 e.stopPropagation();
                 e.preventDefault()
             }, false);
+            
         },
         touchstart: function(e) {
             this._y_start = e.touches[0].pageY;
