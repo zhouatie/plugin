@@ -35,4 +35,4 @@
 ![girl](https://github.com/zhouatie/plugin/raw/master/previewImg/data/myGirl.gif)
 
 ## 总结
-如有疏忽或错误，希望您及时指出，我会尽早修改😆。有什么需要交流的可在评论区与我交流
+如有疏忽或错误，希望您及时指出可Issues，我会尽早修改😆。有什么需要交流的可在评论区与我交流
