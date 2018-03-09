@@ -12,9 +12,13 @@
         }
     };
 
-    function Colorpicker(){
+    function Colorpicker(opt){
         this.Opt = {
             initColor:"rgb(255,0,0)",
+        }
+
+        for(var prop in opt){
+            if(this.Opt[prop]) this.Opt[prop] = opt[prop];
         }
 
         this.elem_wrap = null; // 最外层容器
@@ -28,15 +32,16 @@
 
         this.pancelLeft = 0;
         this.pancelTop = 0;
+
         this.downX = 0;
         this.downY = 0;
-        this.startX = 0;
-        this.startY = 0;
         this.moveX = 0;
         this.moveY = 0;
 
         this.pointLeft = 0;
         this.pointTop = 0;
+
+        this.current_mode = 'hex'; // input框当前的模式
 
         this.rgba = {
             r:0,
@@ -165,6 +170,10 @@
             this.pancelLeft = this.elem_wrap.offsetLeft;
             this.pancelTop = this.elem_wrap.offsetTop;
 
+            // this.hexInput.addEventListener("input",function(){
+            //
+            // },false);
+
             this.bindMove(this.elem_colorPancel,this.setPosition,true);
             this.bindMove(this.elem_barPicker1.parentNode,this.setBar,false);
             this.bindMove(this.elem_barPicker2.parentNode,this.setBar,false);
@@ -193,6 +202,13 @@
                 }
             },false);
         },
+        bindInput: function(elem){
+            var _this = this;
+            elem.addEventListener("input",function(){
+                var value = this.value;
+
+            },false)
+        },
         setPosition: function(x,y){
             var LEFT = parseInt( x-this.pancelLeft );
             var TOP = parseInt( y-this.pancelTop );
@@ -217,26 +233,21 @@
                     left:X+"px"
                 });
                 this.hsb.h = parseInt(360*X/elem_width);
-                //this.setColor(this.HSBToRGB(this.hsb));
-                var rgb = this.HSBToRGB({h:this.hsb.h,s:100,b:100});
-                this.setPancelColor(rgb);
             }else {
                 util.css(elem_bar,{
                     left:X+"px"
                 });
                 this.rgba.a = X/elem_width;
-                this.setPancelColor(this.rgba);
             }
 
-
+            var rgb = this.HSBToRGB({h:this.hsb.h,s:100,b:100});
+            this.setPancelColor(rgb);
         },
         change: function(x,y){
-
             this.hsb.s = parseInt( 100*x/this.pancel_width );
             this.hsb.b = parseInt( 100*(this.pancel_height-y)/this.pancel_height );
 
             var rgb = this.HSBToRGB(this.hsb);
-
             this.setShowColor(rgb);
         },
         setPancelColor: function(rgb){
@@ -263,6 +274,9 @@
         setValue: function(rgb){
             var hex = this.rgbToHex(rgb);
             this.elem_hexInput.value = '#'+hex;
+        },
+        setColorByInput: function(){
+
         },
         HSBToRGB : function (hsb) {
             var rgb = { };
@@ -303,7 +317,32 @@
             });
 
     		return hex.join('');
-    	}
+    	},
+        hexToRgb : function (hex) {console.log(33);
+    		var hex = parseInt(((hex.indexOf('#') > -1) ? hex.substring(1) : hex), 16);
+    		return {r: hex >> 16, g: (hex & 0x00FF00) >> 8, b: (hex & 0x0000FF)};
+    	},
+        hexToHsb : function (hex) {
+    		return rgbToHsb(hexToRgb(hex));
+    	},
+        rgbToHsb : function (rgb) {
+            var hsb = {h: 0, s: 0, x: 0};
+            var min = Math.min(rgb.r, rgb.g, rgb.b);
+            var max = Math.max(rgb.r, rgb.g, rgb.b);
+            var delta = max - min;
+            hsb.x = max;
+            hsb.s = max != 0 ? 255 * delta / max : 0;
+            if (hsb.s != 0) {
+                if (rgb.r == max) hsb.h = (rgb.g - rgb.b) / delta;
+                else if (rgb.g == max) hsb.h = 2 + (rgb.b - rgb.r) / delta;
+                else hsb.h = 4 + (rgb.r - rgb.g) / delta;
+            } else hsb.h = -1;
+            hsb.h *= 60;
+            if (hsb.h < 0) hsb.h += 360;
+            hsb.s *= 100/255;
+            hsb.x *= 100/255;
+            return hsb;
+        }
     }
 
     var picker = new Colorpicker();
