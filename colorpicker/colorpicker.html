@@ -21,17 +21,16 @@
 </head>
 <body>
 
-    <div id="picker"></div>
+    <div class="picker" id="picker"></div>
 </body>
 <script>
     var obj = document.getElementById("picker");
-    colorpicker.create({
-        elem:obj,
+    Colorpicker.create({
+        bindClass:'picker',
         initColor:'rgb(255,0,0)',
-        cards:["#fff","#000","#ccc",'#ff0000','#00ff00'],
         afterCreat:function(){alert(666)},
-        change: function(color){
-
+        change: function(rgba,hex){
+            console.log(hex)
         }
     })
 </script>

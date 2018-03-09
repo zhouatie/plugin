@@ -12,16 +12,11 @@
         }
     };
 
-    function Colorpicker(opt){
-        this.Opt = {
-            initColor:"rgb(255,0,0)",
-        }
+    function Colorpicker(elem){
 
-        for(var prop in opt){
-            if(this.Opt[prop]) this.Opt[prop] = opt[prop];
-        }
-
+        this.bindElem = elem; // 绑定的元素
         this.elem_wrap = null; // 最外层容器
+        this.fixedBg = null; // 拾色器后面固定定位的透明div 用于点击隐藏拾色器
         this.elem_colorPancel = null; // 色彩面板
         this.elem_picker = null; // 拾色器色块按钮
         this.elem_barPicker1 = null; // 颜色条
@@ -55,6 +50,8 @@
             s:100,
             b:100
         };
+
+        this.init();
     };
 /*
     var default = {
@@ -63,11 +60,26 @@
         afterCreat : fn
     }
 */
+    Colorpicker.Opt = {
+        bindClass:'',
+        initColor:"rgb(255,0,0)"
+    }
 
+    Colorpicker.create = function(opt){
+        for(var prop in opt){
+            Colorpicker.Opt[prop] = opt[prop];
+        };
 
+        var elemArr = document.getElementsByClassName(Colorpicker.Opt.bindClass);
+
+        for(var i=0;i<elemArr.length;i++){
+            elemArr[i].colorpicker = new Colorpicker(elemArr[i]);
+        }
+
+    }
 
     Colorpicker.prototype = {
-        render : function(elem,initColor,cards){
+        render : function(){
             var tpl = '<div style="position: fixed; top: 0px; right: 0px; bottom: 0px; left: 0px;"></div>'+
               '<div style="position: inherit; z-index: 100;">'+
                 '<div class="colorpicker-pancel" style="background: rgb(255, 255, 255); border-radius: 2px; box-shadow: rgba(0, 0, 0, 0.3) 0px 0px 2px, rgba(0, 0, 0, 0.3) 0px 4px 8px; box-sizing: initial; width: 225px; font-family: Menlo;"><div style="width: 100%; padding-bottom: 55%; position: relative; border-radius: 2px 2px 0px 0px; overflow: hidden;">'+
@@ -137,26 +149,24 @@
 
             return tpl;
         },
-        create : function(userData){
-
-            var initColor = userData.initColor? userData.initColor:this.Opt.initColor;
+        init : function(){
+            var _this = this;
+            var initColor = Colorpicker.Opt.initColor;
             var rgb = initColor.slice(4,-1).split(",");
-            this.rgba.r = rgb[0];
-            this.rgba.g = rgb[1];
-            this.rgba.b = rgb[2];
+            this.rgba.r = parseInt(rgb[0]);
+            this.rgba.g = parseInt(rgb[1]);
+            this.rgba.b = parseInt(rgb[2]);
 
             var body = document.getElementsByTagName("body")[0],
                 div = document.createElement("div");
 
-            util.css(div,{
-                "position": "absolute",
-                 "z-index": 2
-            });
+
 
             div.innerHTML = this.render();
             body.appendChild(div);
 
             this.elem_wrap = div;
+            this.fixedBg = div.children[0];
             this.elem_colorPancel = div.getElementsByClassName("color-pancel")[0];
             this.pancel_width = this.elem_colorPancel.offsetWidth;
             this.pancel_height = this.elem_colorPancel.offsetHeight;
@@ -170,19 +180,40 @@
             this.pancelLeft = this.elem_wrap.offsetLeft;
             this.pancelTop = this.elem_wrap.offsetTop;
 
-            // this.hexInput.addEventListener("input",function(){
-            //
-            // },false);
+            util.css(div,{
+                "position": "absolute",
+                 "z-index": 2,
+                 "display": 'none'
+            });
+
+
 
             this.bindMove(this.elem_colorPancel,this.setPosition,true);
             this.bindMove(this.elem_barPicker1.parentNode,this.setBar,false);
             this.bindMove(this.elem_barPicker2.parentNode,this.setBar,false);
 
+            this.bindElem.addEventListener("click",function(){
+                _this.show();
+            },false);
+
+            this.fixedBg.addEventListener("click",function(e){
+                _this.hide();
+            },false)
+        },
+        show: function(){
+            util.css(this.elem_wrap,{
+                "display":"block"
+            })
+        },
+        hide: function(){
+            util.css(this.elem_wrap,{
+                "display":"none"
+            })
         },
         bindMove: function(elem,fn,bool){
             var _this = this;
 
-            elem.addEventListener("mousedown",function(e){
+            elem.addEventListener("mousedown",function(e){console.log(e)
                 _this.downX = e.pageX;
                 _this.downY = e.pageY;
                 bool? fn.call(_this,_this.moveX,_this.moveY):fn.call(_this,elem,_this.downX,_this.downY);
@@ -274,6 +305,10 @@
         setValue: function(rgb){
             var hex = this.rgbToHex(rgb);
             this.elem_hexInput.value = '#'+hex;
+            this.bindElem.setAttribute("colorpickerOfColor",'#'+hex);
+            util.css(this.bindElem,{
+                background:"#"+hex
+            })
         },
         setColorByInput: function(){
 
@@ -345,6 +380,5 @@
         }
     }
 
-    var picker = new Colorpicker();
-    window.colorpicker = picker;
+    window.Colorpicker = Colorpicker;
 })()
