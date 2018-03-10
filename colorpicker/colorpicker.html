@@ -7,10 +7,10 @@
     <title>colorpicker</title>
     <script src="./colorpicker.js"></script>
     <style>
-    * {
-        margin:0;
-        padding:0;
-    }
+        * {
+            margin:0;
+            padding:0;
+        }
         .picker {
             width:20px;
             height:20px;
@@ -39,11 +39,7 @@
     var obj = document.getElementById("picker");
     Colorpicker.create({
         bindClass:'picker',
-        initColor:'rgb(255,0,0)',
-        afterCreat:function(){alert(666)},
-        change: function(rgba,hex){
-            console.log(hex)
-        }
+        initColor:'rgb(255,0,0)'
     })
 </script>
 </html>

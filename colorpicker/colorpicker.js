@@ -230,10 +230,15 @@
             },false)
 
             this.elem_showModeBtn.addEventListener("click",function(){
-              _this.switch_current_mode();
-              _this.bindInput();
+                _this.switch_current_mode();
             },false)
-            this.bindInput();
+
+            this.elem_wrap.addEventListener("input",function(e){
+                var target = e.target,
+                    value = target.value;
+
+                _this.setColorByInput(value);
+            },false)
         },
         setPosition: function(x,y){
             var LEFT = parseInt( x-this.pancelLeft ),
@@ -297,6 +302,8 @@
             util.css(this.elem_opacityPancel,{
                 background: 'linear-gradient(to right, rgba('+rgb.r+','+rgb.g+','+rgb.b+',0) 0%, rgba('+rgb.r+','+rgb.g+','+rgb.b+',1))'
             });
+
+
         },
         setValue: function(rgb){
             var hex = this.rgbToHex(rgb);
@@ -377,17 +384,6 @@
                     document.removeEventListener("mouseup",mouseup,false)
                 }
             },false);
-        },
-        bindInput: function(elem){
-            var _this = this,
-                inputs = this.elem_wrap.getElementsByTagName("input");
-
-            for(var i=0;i<inputs.length;i++){
-                inputs[i].addEventListener("input",function(){
-                    var value = this.value;
-                    _this.setColorByInput(value);
-                },false)
-            }
         },
         show: function(){
             util.css(this.elem_wrap,{
