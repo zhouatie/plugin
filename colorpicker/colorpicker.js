@@ -148,10 +148,39 @@
 
             return tpl;
         },
+        getInputTpl : function(){
+            var current_mode_html = "";
+            switch (this.current_mode) {
+              case 'hex':
+                var hex = "#"+this.rgbToHex(this.HSBToRGB(this.hsb));
+
+                current_mode_html += '<div style="padding-left: 6px; width: 100%;">'+
+                  '<div style="position: relative;">'+
+                    '<input class="colorpicker-hexInput" value="'+hex+'" spellcheck="false" style="font-size: 11px; color: rgb(51, 51, 51); width: 100%; border-radius: 2px; border: none; box-shadow: rgb(218, 218, 218) 0px 0px 0px 1px inset; height: 21px; text-align: center;">'+
+                    '<span style="text-transform: uppercase; font-size: 11px; line-height: 11px; color: rgb(150, 150, 150); text-align: center; display: block; margin-top: 12px;">hex</span>'+
+                  '</div>'+
+                '</div>';
+                break;
+                case 'rgb':
+                for(var i=0;i<3;i++){
+
+                  current_mode_html += '<div style="padding-left: 6px; width: 100%;">'+
+                    '<div style="position: relative;">'+
+                      '<input class="colorpicker-hexInput" value="'+this.rgba['rgb'[i]]+'" spellcheck="false" style="font-size: 11px; color: rgb(51, 51, 51); width: 100%; border-radius: 2px; border: none; box-shadow: rgb(218, 218, 218) 0px 0px 0px 1px inset; height: 21px; text-align: center;">'+
+                      '<span style="text-transform: uppercase; font-size: 11px; line-height: 11px; color: rgb(150, 150, 150); text-align: center; display: block; margin-top: 12px;">'+('rgb'[i])+'</span>'+
+                    '</div>'+
+                  '</div>';
+                }
+              default:
+
+            }
+            return current_mode_html;
+        },
         init : function(){
-            var _this = this;
-            var initColor = Colorpicker.Opt.initColor;
-            var rgb = initColor.slice(4,-1).split(",");
+            var _this = this,
+                initColor = Colorpicker.Opt.initColor,
+                rgb = initColor.slice(4,-1).split(",");
+
             this.rgba.r = parseInt(rgb[0]);
             this.rgba.g = parseInt(rgb[1]);
             this.rgba.b = parseInt(rgb[2]);
@@ -206,82 +235,6 @@
             },false)
             this.bindInput();
         },
-        getInputTpl : function(){
-            var current_mode_html = "";
-            switch (this.current_mode) {
-              case 'hex':
-                var hex = "#"+this.rgbToHex(this.HSBToRGB(this.hsb));
-
-                current_mode_html += '<div style="padding-left: 6px; width: 100%;">'+
-                  '<div style="position: relative;">'+
-                    '<input class="colorpicker-hexInput" value="'+hex+'" spellcheck="false" style="font-size: 11px; color: rgb(51, 51, 51); width: 100%; border-radius: 2px; border: none; box-shadow: rgb(218, 218, 218) 0px 0px 0px 1px inset; height: 21px; text-align: center;">'+
-                    '<span style="text-transform: uppercase; font-size: 11px; line-height: 11px; color: rgb(150, 150, 150); text-align: center; display: block; margin-top: 12px;">hex</span>'+
-                  '</div>'+
-                '</div>';
-                break;
-                case 'rgb':
-                for(var i=0;i<3;i++){
-
-                  current_mode_html += '<div style="padding-left: 6px; width: 100%;">'+
-                    '<div style="position: relative;">'+
-                      '<input class="colorpicker-hexInput" value="'+this.rgba['rgb'[i]]+'" spellcheck="false" style="font-size: 11px; color: rgb(51, 51, 51); width: 100%; border-radius: 2px; border: none; box-shadow: rgb(218, 218, 218) 0px 0px 0px 1px inset; height: 21px; text-align: center;">'+
-                      '<span style="text-transform: uppercase; font-size: 11px; line-height: 11px; color: rgb(150, 150, 150); text-align: center; display: block; margin-top: 12px;">'+('rgb'[i])+'</span>'+
-                    '</div>'+
-                  '</div>';
-                }
-              default:
-
-            }
-            return current_mode_html;
-        },
-        switch_current_mode: function(){
-          this.current_mode = this.current_mode == 'hex'? 'rgb':'hex';
-          this.elem_inputWrap.innerHTML = this.getInputTpl();
-        },
-        show: function(){
-            util.css(this.elem_wrap,{
-                "display":"block"
-            })
-        },
-        hide: function(){
-            util.css(this.elem_wrap,{
-                "display":"none"
-            })
-        },
-        bindMove: function(elem,fn,bool){
-            var _this = this;
-
-            elem.addEventListener("mousedown",function(e){
-                _this.downX = e.pageX;
-                _this.downY = e.pageY;
-                bool? fn.call(_this,_this.downX,_this.downY):fn.call(_this,elem,_this.downX,_this.downY);
-
-                document.addEventListener("mousemove",mousemove,false);
-                function mousemove(e){
-                    _this.moveX = e.pageX;
-                    _this.moveY = e.pageY;
-                    bool? fn.call(_this,_this.moveX,_this.moveY):fn.call(_this,elem,_this.moveX,_this.moveY);
-                    e.preventDefault();
-                }
-                document.addEventListener("mouseup",mouseup,false);
-                function mouseup(e){
-
-                    document.removeEventListener("mousemove",mousemove,false)
-                    document.removeEventListener("mouseup",mouseup,false)
-                }
-            },false);
-        },
-        bindInput: function(elem){
-            var _this = this,
-                inputs = this.elem_wrap.getElementsByTagName("input");
-
-            for(var i=0;i<inputs.length;i++){
-                inputs[i].addEventListener("input",function(){
-                    var value = this.value;
-                    _this.setColorByInput(value);
-                },false)
-            }
-        },
         setPosition: function(x,y){
             var LEFT = parseInt( x-this.pancelLeft ),
                 TOP = parseInt( y-this.pancelTop );
@@ -301,10 +254,10 @@
 
         },
         setBar: function(elem,x){
-            var elem_bar = elem.getElementsByTagName("div")[0];
-            var rect = elem.getBoundingClientRect();
-            var elem_width = elem.offsetWidth;
-            var X = Math.max(0,Math.min(x - rect.x,elem_width));
+            var elem_bar = elem.getElementsByTagName("div")[0],
+                rect = elem.getBoundingClientRect(),
+                elem_width = elem.offsetWidth,
+                X = Math.max(0,Math.min(x - rect.x,elem_width));
 
             if(elem_bar===this.elem_barPicker1){
                 util.css(elem_bar,{
@@ -329,7 +282,6 @@
             util.css(this.elem_colorPancel,{
                 background:'rgba('+rgb.r+','+rgb.g+','+rgb.b+','+this.rgba.a+')'
             });
-
         },
         setShowColor: function(){
             var rgb = this.HSBToRGB(this.hsb);
@@ -367,12 +319,13 @@
                 }
                 break;
               case 'rgb':
-                var inputs = this.elem_wrap.getElementsByTagName("input");
-                var rgb = {
-                  r:inputs[0].value? parseInt(inputs[0].value):0,
-                  g:inputs[1].value? parseInt(inputs[1].value):0,
-                  b:inputs[2].value? parseInt(inputs[2].value):0
-                };
+                var inputs = this.elem_wrap.getElementsByTagName("input"),
+                    rgb = {
+                      r:inputs[0].value? parseInt(inputs[0].value):0,
+                      g:inputs[1].value? parseInt(inputs[1].value):0,
+                      b:inputs[2].value? parseInt(inputs[2].value):0
+                    };
+
                 this.hsb = this.rgbToHsb(rgb);
             }
 
@@ -397,6 +350,54 @@
           util.css(this.bindElem,{
               background:"#"+hex
           })
+        },
+        switch_current_mode: function(){
+          this.current_mode = this.current_mode == 'hex'? 'rgb':'hex';
+          this.elem_inputWrap.innerHTML = this.getInputTpl();
+        },
+        bindMove: function(elem,fn,bool){
+            var _this = this;
+
+            elem.addEventListener("mousedown",function(e){
+                _this.downX = e.pageX;
+                _this.downY = e.pageY;
+                bool? fn.call(_this,_this.downX,_this.downY):fn.call(_this,elem,_this.downX,_this.downY);
+
+                document.addEventListener("mousemove",mousemove,false);
+                function mousemove(e){
+                    _this.moveX = e.pageX;
+                    _this.moveY = e.pageY;
+                    bool? fn.call(_this,_this.moveX,_this.moveY):fn.call(_this,elem,_this.moveX,_this.moveY);
+                    e.preventDefault();
+                }
+                document.addEventListener("mouseup",mouseup,false);
+                function mouseup(e){
+
+                    document.removeEventListener("mousemove",mousemove,false)
+                    document.removeEventListener("mouseup",mouseup,false)
+                }
+            },false);
+        },
+        bindInput: function(elem){
+            var _this = this,
+                inputs = this.elem_wrap.getElementsByTagName("input");
+
+            for(var i=0;i<inputs.length;i++){
+                inputs[i].addEventListener("input",function(){
+                    var value = this.value;
+                    _this.setColorByInput(value);
+                },false)
+            }
+        },
+        show: function(){
+            util.css(this.elem_wrap,{
+                "display":"block"
+            })
+        },
+        hide: function(){
+            util.css(this.elem_wrap,{
+                "display":"none"
+            })
         },
         HSBToRGB : function (hsb) {
             var rgb = { };
