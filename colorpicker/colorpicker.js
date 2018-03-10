@@ -24,6 +24,8 @@
         this.elem_hexInput = null; // 显示hex的表单
         this.elem_showColor = null; // 显示当前颜色
         this.elem_opacityPancel = null; // 透明度背景元素
+        this.elem_showModeBtn = null; // 切换输入框模式按钮
+        this.elem_inputWrap = null; // 输入框外层容器
 
         this.pancelLeft = 0;
         this.pancelTop = 0;
@@ -62,7 +64,8 @@
 */
     Colorpicker.Opt = {
         bindClass:'',
-        initColor:"rgb(255,0,0)"
+        initColor:"rgb(255,0,0)",
+        allMode:['hex','rgb']
     }
 
     Colorpicker.create = function(opt){
@@ -101,7 +104,7 @@
                   '<div style="width: 32px;">'+
                     '<div style="margin-top: 6px; width: 16px; height: 16px; border-radius: 8px; position: relative; overflow: hidden;">'+
                       '<div class="colorpicker-showColor" style="position: absolute; top: 0px; right: 0px; bottom: 0px; left: 0px; border-radius: 8px; box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 0px 1px inset; background:rgb('+this.rgba.r+','+this.rgba.g+','+this.rgba.b+'); z-index: 2;"></div>'+
-                      '<div class="abc" style="position: absolute; top: 0px; right: 0px; bottom: 0px; left: 0px; background: url(&quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAMUlEQVQ4T2NkYGAQYcAP3uCTZhw1gGGYhAGBZIA/nYDCgBDAm9BGDWAAJyRCgLaBCAAgXwixzAS0pgAAAABJRU5ErkJggg==&quot;) left center;"></div></div></div><div style="-webkit-box-flex: 1; flex: 1 1 0%;"><div style="height: 10px; position: relative; margin-bottom: 8px;"><div style="position: absolute; top: 0px;'+ 'right: 0px; bottom: 0px; left: 0px;"><div class="hue-horizontal" style="padding: 0px 2px; position: relative; height: 100%;">'+
+                      '<div class="" style="position: absolute; top: 0px; right: 0px; bottom: 0px; left: 0px; background: url(&quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAMUlEQVQ4T2NkYGAQYcAP3uCTZhw1gGGYhAGBZIA/nYDCgBDAm9BGDWAAJyRCgLaBCAAgXwixzAS0pgAAAABJRU5ErkJggg==&quot;) left center;"></div></div></div><div style="-webkit-box-flex: 1; flex: 1 1 0%;"><div style="height: 10px; position: relative; margin-bottom: 8px;"><div style="position: absolute; top: 0px;'+ 'right: 0px; bottom: 0px; left: 0px;"><div class="hue-horizontal" style="padding: 0px 2px; position: relative; height: 100%;">'+
                       '<style>'+
                       '.hue-horizontal {background: linear-gradient(to right, #f00 0%, #ff0 17%, #0f0 33%, #0ff 50%, #00f 67%, #f0f 83%, #f00 100%);background: -webkit-linear-gradient(to right, #f00 0%, #ff0 17%, #0f0 33%, #0ff 50%, #00f 67%, #f0f 83%, #f00 100%);}'+
                       '.hue-vertical {background: linear-gradient(to top, #f00 0%, #ff0 17%, #0f0 33%,#0ff 50%, #00f 67%, #f0f 83%, #f00 100%);background: -webkit-linear-gradient(to top, #f00 0%, #ff0 17%,#0f0 33%, #0ff 50%, #00f 67%, #f0f 83%, #f00 100%);}'+
@@ -129,15 +132,11 @@
                 '</div>'+
               '</div>'+
               '<div class="flexbox-fix" style="padding-top: 16px; display: flex;">'+
-                '<div class="flexbox-fix" style="-webkit-box-flex: 1; flex: 1 1 0%; display: flex; margin-left: -6px;">'+
-                  '<div style="padding-left: 6px; width: 100%;">'+
-                    '<div style="position: relative;">'+
-                      '<input class="colorpicker-hexInput" value="#1890FF" spellcheck="false" style="font-size: 11px; color: rgb(51, 51, 51); width: 100%; border-radius: 2px; border: none; box-shadow: rgb(218, 218, 218) 0px 0px 0px 1px inset; height: 21px; text-align: center;">'+
-                      '<span style="text-transform: uppercase; font-size: 11px; line-height: 11px; color: rgb(150, 150, 150); text-align: center; display: block; margin-top: 12px;">hex</span>'+
-                    '</div>'+
-                  '</div>'+
-                '</div>'+
-                '<div style="width: 32px; text-align: right; position: relative;">'+
+                '<div class="flexbox-fix colorpicker-inputWrap" style="-webkit-box-flex: 1; flex: 1 1 0%; display: flex; margin-left: -6px;">';
+
+                tpl += this.getInputTpl();
+                tpl += '</div>'+
+                '<div class="colorpicker-showModeBtn" style="width: 32px; text-align: right; position: relative;">'+
                       '<div style="margin-right: -4px;  cursor: pointer; position: relative;">'+
                         '<svg viewBox="0 0 24 24" style="width: 24px; height: 24px; border: 1px solid transparent; border-radius: 5px;"><path fill="#333" d="M12,5.83L15.17,9L16.58,7.59L12,3L7.41,7.59L8.83,9L12,5.83Z"></path><path fill="#333" d="M12,18.17L8.83,15L7.42,16.41L12,21L16.59,16.41L15.17,15Z"></path></svg>'+
                       '</div>'+
@@ -174,8 +173,10 @@
             this.elem_showColor = div.getElementsByClassName("colorpicker-showColor")[0];
             this.elem_barPicker1 = div.getElementsByClassName("colorBar-color-picker")[0];
             this.elem_barPicker2 = div.getElementsByClassName("colorBar-opacity-picker")[0];
-            this.elem_opacityPancel = this.elem_barPicker2.parentNode.parentNode.children[1];
             this.elem_hexInput = div.getElementsByClassName("colorpicker-hexInput")[0];
+            this.elem_showModeBtn = div.getElementsByClassName("colorpicker-showModeBtn")[0];
+            this.elem_inputWrap = div.getElementsByClassName("colorpicker-inputWrap")[0];
+            this.elem_opacityPancel = this.elem_barPicker2.parentNode.parentNode.children[1];
 
             this.pancelLeft = this.elem_wrap.offsetLeft;
             this.pancelTop = this.elem_wrap.offsetTop;
@@ -185,8 +186,6 @@
                  "z-index": 2,
                  "display": 'none'
             });
-
-
 
             this.bindMove(this.elem_colorPancel,this.setPosition,true);
             this.bindMove(this.elem_barPicker1.parentNode,this.setBar,false);
@@ -199,6 +198,44 @@
             this.fixedBg.addEventListener("click",function(e){
                 _this.hide();
             },false)
+
+            this.elem_showModeBtn.addEventListener("click",function(){
+              _this.switch_current_mode();
+              _this.bindInput();
+            },false)
+            this.bindInput();
+        },
+        getInputTpl : function(){
+            var current_mode_html = "";
+            switch (this.current_mode) {
+              case 'hex':
+                var hex = "#"+this.rgbToHex(this.HSBToRGB(this.hsb));
+
+                current_mode_html += '<div style="padding-left: 6px; width: 100%;">'+
+                  '<div style="position: relative;">'+
+                    '<input class="colorpicker-hexInput" value="'+hex+'" spellcheck="false" style="font-size: 11px; color: rgb(51, 51, 51); width: 100%; border-radius: 2px; border: none; box-shadow: rgb(218, 218, 218) 0px 0px 0px 1px inset; height: 21px; text-align: center;">'+
+                    '<span style="text-transform: uppercase; font-size: 11px; line-height: 11px; color: rgb(150, 150, 150); text-align: center; display: block; margin-top: 12px;">hex</span>'+
+                  '</div>'+
+                '</div>';
+                break;
+                case 'rgb':
+                for(var i=0;i<3;i++){
+
+                  current_mode_html += '<div style="padding-left: 6px; width: 100%;">'+
+                    '<div style="position: relative;">'+
+                      '<input class="colorpicker-hexInput" value="'+this.rgba['rgb'[i]]+'" spellcheck="false" style="font-size: 11px; color: rgb(51, 51, 51); width: 100%; border-radius: 2px; border: none; box-shadow: rgb(218, 218, 218) 0px 0px 0px 1px inset; height: 21px; text-align: center;">'+
+                      '<span style="text-transform: uppercase; font-size: 11px; line-height: 11px; color: rgb(150, 150, 150); text-align: center; display: block; margin-top: 12px;">'+('rgb'[i])+'</span>'+
+                    '</div>'+
+                  '</div>';
+                }
+              default:
+
+            }
+            return current_mode_html;
+        },
+        switch_current_mode: function(){
+          this.current_mode = this.current_mode == 'hex'? 'rgb':'hex';
+          this.elem_inputWrap.innerHTML = this.getInputTpl();
         },
         show: function(){
             util.css(this.elem_wrap,{
@@ -213,10 +250,10 @@
         bindMove: function(elem,fn,bool){
             var _this = this;
 
-            elem.addEventListener("mousedown",function(e){console.log(e)
+            elem.addEventListener("mousedown",function(e){
                 _this.downX = e.pageX;
                 _this.downY = e.pageY;
-                bool? fn.call(_this,_this.moveX,_this.moveY):fn.call(_this,elem,_this.downX,_this.downY);
+                bool? fn.call(_this,_this.downX,_this.downY):fn.call(_this,elem,_this.downX,_this.downY);
 
                 document.addEventListener("mousemove",mousemove,false);
                 function mousemove(e){
@@ -234,15 +271,19 @@
             },false);
         },
         bindInput: function(elem){
-            var _this = this;
-            elem.addEventListener("input",function(){
-                var value = this.value;
+            var _this = this,
+                inputs = this.elem_wrap.getElementsByTagName("input");
 
-            },false)
+            for(var i=0;i<inputs.length;i++){
+                inputs[i].addEventListener("input",function(){
+                    var value = this.value;
+                    _this.setColorByInput(value);
+                },false)
+            }
         },
         setPosition: function(x,y){
-            var LEFT = parseInt( x-this.pancelLeft );
-            var TOP = parseInt( y-this.pancelTop );
+            var LEFT = parseInt( x-this.pancelLeft ),
+                TOP = parseInt( y-this.pancelTop );
 
             this.pointLeft = Math.max(0,Math.min(LEFT,this.pancel_width));
             this.pointTop = Math.max(0,Math.min(TOP,this.pancel_height));
@@ -251,7 +292,12 @@
                 left:this.pointLeft+"px",
                 top:this.pointTop+"px"
             })
-            this.change(this.pointLeft,this.pointTop);
+            this.hsb.s = parseInt( 100*this.pointLeft/this.pancel_width );
+            this.hsb.b = parseInt( 100*(this.pancel_height-this.pointTop)/this.pancel_height );
+
+            this.setShowColor();
+            this.setValue(this.rgba);
+
         },
         setBar: function(elem,x){
             var elem_bar = elem.getElementsByTagName("div")[0];
@@ -271,27 +317,21 @@
                 this.rgba.a = X/elem_width;
             }
 
-            var rgb = this.HSBToRGB({h:this.hsb.h,s:100,b:100});
-            this.setPancelColor(rgb);
-        },
-        change: function(x,y){
-            this.hsb.s = parseInt( 100*x/this.pancel_width );
-            this.hsb.b = parseInt( 100*(this.pancel_height-y)/this.pancel_height );
+            this.setPancelColor(this.hsb.h);
+            this.setShowColor();
+            this.setValue(this.rgba);
 
-            var rgb = this.HSBToRGB(this.hsb);
-            this.setShowColor(rgb);
         },
-        setPancelColor: function(rgb){
+        setPancelColor: function(h){
+            var rgb = this.HSBToRGB({h:h,s:100,b:100});
+
             util.css(this.elem_colorPancel,{
                 background:'rgba('+rgb.r+','+rgb.g+','+rgb.b+','+this.rgba.a+')'
             });
-            util.css(this.elem_opacityPancel,{
-                background: 'linear-gradient(to right, rgba('+rgb.r+','+rgb.g+','+rgb.b+',0) 0%, rgba('+rgb.r+','+rgb.g+','+rgb.b+',1))'
-            });
-            var rgb = this.HSBToRGB(this.hsb);
-            this.setShowColor(rgb);
+
         },
-        setShowColor: function(rgb){
+        setShowColor: function(){
+            var rgb = this.HSBToRGB(this.hsb);
 
             this.rgba.r = rgb.r;
             this.rgba.g = rgb.g;
@@ -300,18 +340,62 @@
             util.css(this.elem_showColor,{
                 background:'rgba('+rgb.r+','+rgb.g+','+rgb.b+','+this.rgba.a+')'
             });
-            this.setValue(rgb);
+
+            util.css(this.elem_opacityPancel,{
+                background: 'linear-gradient(to right, rgba('+rgb.r+','+rgb.g+','+rgb.b+',0) 0%, rgba('+rgb.r+','+rgb.g+','+rgb.b+',1))'
+            });
         },
         setValue: function(rgb){
             var hex = this.rgbToHex(rgb);
-            this.elem_hexInput.value = '#'+hex;
+            this.elem_inputWrap.innerHTML = this.getInputTpl();
             this.bindElem.setAttribute("colorpickerOfColor",'#'+hex);
             util.css(this.bindElem,{
                 background:"#"+hex
             })
         },
-        setColorByInput: function(){
+        setColorByInput: function(value){
+            var _this = this;
+            switch (this.current_mode) {
+              case "hex":
+                value = value.slice(1);
+                if(value.length==3){
+                    value = '#'+value[0]+value[0]+value[1]+value[1]+value[2]+value[2];
+                    this.hsb = this.hexToHsb(value);
+                }else if(value.length==6){
+                    this.hsb = this.hexToHsb(value);
+                }
+                break;
+              case 'rgb':
+                var inputs = this.elem_wrap.getElementsByTagName("input");
+                var rgb = {
+                  r:inputs[0].value? parseInt(inputs[0].value):0,
+                  g:inputs[1].value? parseInt(inputs[1].value):0,
+                  b:inputs[2].value? parseInt(inputs[2].value):0
+                };
+                this.hsb = this.rgbToHsb(rgb);
+            }
 
+            this.changeViewByHsb();
+        },
+        changeViewByHsb: function(){
+          this.pointLeft = parseInt(this.hsb.s*this.pancel_width/100);
+          this.pointTop = parseInt( (100-this.hsb.b)*this.pancel_height/100);
+          util.css(this.elem_picker,{
+              left:this.pointLeft+"px",
+              top:this.pointTop+"px"
+          });
+
+          this.setPancelColor(this.hsb.h);
+          this.setShowColor();
+          util.css(this.elem_barPicker1,{
+              left:this.hsb.h/360*(this.elem_barPicker1.parentNode.offsetWidth)+"px"
+          });
+
+          var hex = this.rgbToHex(this.HSBToRGB(this.hsb));
+          this.bindElem.setAttribute("colorpickerOfColor",'#'+hex);
+          util.css(this.bindElem,{
+              background:"#"+hex
+          })
         },
         HSBToRGB : function (hsb) {
             var rgb = { };
@@ -340,32 +424,32 @@
             return { r: Math.round(rgb.r), g: Math.round(rgb.g), b: Math.round(rgb.b) };
         },
         rgbToHex : function (rgb) {
-    		var hex = [
-    			rgb.r.toString(16),
-    			rgb.g.toString(16),
-    			rgb.b.toString(16)
-    		];
+        		var hex = [
+        			rgb.r.toString(16),
+        			rgb.g.toString(16),
+        			rgb.b.toString(16)
+            ];
             hex.map(function(str,i){
                 if (str.length == 1) {
                     hex[i] = '0' + str;
                 }
             });
 
-    		return hex.join('');
-    	},
-        hexToRgb : function (hex) {console.log(33);
-    		var hex = parseInt(((hex.indexOf('#') > -1) ? hex.substring(1) : hex), 16);
-    		return {r: hex >> 16, g: (hex & 0x00FF00) >> 8, b: (hex & 0x0000FF)};
-    	},
+        		return hex.join('');
+      	},
+        hexToRgb : function (hex) {
+        		var hex = parseInt(((hex.indexOf('#') > -1) ? hex.substring(1) : hex), 16);
+        		return {r: hex >> 16, g: (hex & 0x00FF00) >> 8, b: (hex & 0x0000FF)};
+      	},
         hexToHsb : function (hex) {
-    		return rgbToHsb(hexToRgb(hex));
-    	},
+      		  return this.rgbToHsb(this.hexToRgb(hex));
+      	},
         rgbToHsb : function (rgb) {
-            var hsb = {h: 0, s: 0, x: 0};
+            var hsb = {h: 0, s: 0, b: 0};
             var min = Math.min(rgb.r, rgb.g, rgb.b);
             var max = Math.max(rgb.r, rgb.g, rgb.b);
             var delta = max - min;
-            hsb.x = max;
+            hsb.b = max;
             hsb.s = max != 0 ? 255 * delta / max : 0;
             if (hsb.s != 0) {
                 if (rgb.r == max) hsb.h = (rgb.g - rgb.b) / delta;
@@ -375,7 +459,7 @@
             hsb.h *= 60;
             if (hsb.h < 0) hsb.h += 360;
             hsb.s *= 100/255;
-            hsb.x *= 100/255;
+            hsb.b *= 100/255;
             return hsb;
         }
     }
