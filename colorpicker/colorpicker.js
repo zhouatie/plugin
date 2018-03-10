@@ -159,8 +159,6 @@
             var body = document.getElementsByTagName("body")[0],
                 div = document.createElement("div");
 
-
-
             div.innerHTML = this.render();
             body.appendChild(div);
 
@@ -178,13 +176,16 @@
             this.elem_inputWrap = div.getElementsByClassName("colorpicker-inputWrap")[0];
             this.elem_opacityPancel = this.elem_barPicker2.parentNode.parentNode.children[1];
 
-            this.pancelLeft = this.elem_wrap.offsetLeft;
-            this.pancelTop = this.elem_wrap.offsetTop;
+            var rect = this.bindElem.getBoundingClientRect();
 
+            this.pancelLeft = rect.left;
+            this.pancelTop = rect.bottom;
             util.css(div,{
                 "position": "absolute",
                  "z-index": 2,
-                 "display": 'none'
+                 "display": 'none',
+                 "top": rect.bottom+"px",
+                 "left": rect.left+"px"
             });
 
             this.bindMove(this.elem_colorPancel,this.setPosition,true);
