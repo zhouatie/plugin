@@ -302,16 +302,16 @@
             util.css(this.elem_opacityPancel,{
                 background: 'linear-gradient(to right, rgba('+rgb.r+','+rgb.g+','+rgb.b+',0) 0%, rgba('+rgb.r+','+rgb.g+','+rgb.b+',1))'
             });
-
-
         },
         setValue: function(rgb){
-            var hex = this.rgbToHex(rgb);
+            var hex = "#"+this.rgbToHex(rgb);
             this.elem_inputWrap.innerHTML = this.getInputTpl();
-            this.bindElem.setAttribute("colorpickerOfColor",'#'+hex);
-            util.css(this.bindElem,{
-                background:"#"+hex
-            })
+            // this.bindElem.setAttribute("colorpickerOfColor",'#'+hex);
+            // util.css(this.bindElem,{
+            //     background:"#"+hex
+            // })
+            Colorpicker.Opt.change(this.bindElem,hex);
+
         },
         setColorByInput: function(value){
             var _this = this;
@@ -352,11 +352,12 @@
               left:this.hsb.h/360*(this.elem_barPicker1.parentNode.offsetWidth)+"px"
           });
 
-          var hex = this.rgbToHex(this.HSBToRGB(this.hsb));
-          this.bindElem.setAttribute("colorpickerOfColor",'#'+hex);
-          util.css(this.bindElem,{
-              background:"#"+hex
-          })
+          var hex = '#'+this.rgbToHex(this.HSBToRGB(this.hsb));
+          Colorpicker.Opt.change(this.bindElem,hex);
+          // this.bindElem.setAttribute("colorpickerOfColor",hex);
+          // util.css(this.bindElem,{
+          //     background:hex
+          // })
         },
         switch_current_mode: function(){
           this.current_mode = this.current_mode == 'hex'? 'rgb':'hex';

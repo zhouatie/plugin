@@ -29,17 +29,18 @@
 </head>
 <body>
   <div class="abc">
-
     <div class="picker" id="picker"></div>
     <div class="picker" id="picker2"></div>
   </div>
-
 </body>
 <script>
     var obj = document.getElementById("picker");
     Colorpicker.create({
         bindClass:'picker',
-        initColor:'rgb(255,0,0)'
+        change: function(elem,hex){
+          // console.log(elem,hex)
+          elem.style.backgroundColor = hex;
+        }
     })
 </script>
 </html>
