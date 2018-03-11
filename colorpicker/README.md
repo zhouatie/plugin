@@ -1,5 +1,4 @@
-# [在线预览](https://zhouatie.github.io/plugin/colorpicker/colorpicker.html)
-# 原生js实现移动端选择器插件
+# 原生js实现拾色器插件
 
 ## 前言
 插件功能只满足我司业务需求，如果希望有更多功能的，可在下方留言，我尽量扩展！如果你有需要或者喜欢的话，可以给我github来个star 😆
