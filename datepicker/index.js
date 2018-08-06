@@ -99,7 +99,8 @@
         var date = new Date();
         this.dateOpt = {
             _year: date.getFullYear(),
-            _month: date.getMonth()
+            _month: date.getMonth(),
+            _date: date.getDate(),
         }
         // 存储页面存在的calendar对象
         this.calendars = {};
@@ -161,8 +162,25 @@
                 },
                 set: function(newVal) {
                     if (newVal === this._month) return;
-                    this._month = newVal;
+                    if (newVal >= 12) {
+                        this.year++;
+                        this._month = newVal % 12;
+                    } else this._month = newVal;
+                    console.log(newVal, 'month change');
                     self.render();
+                }
+            })
+            Object.defineProperty(this.dateOpt, 'date', {
+                get: function() {
+                    return this._date;
+                },
+                set: function(newVal) {
+                    if (newVal === this._date) return;
+                    console.log(new Date(this.year,this.month+1,0))
+                    if (newVal > new Date(this.year,this.month+1,0).getDate()) {
+                        this._date = 1;
+                        this.month++;
+                    }
                 }
             })
             
@@ -177,6 +195,10 @@
             }, false);
         },
         render: function() {
+            console.log(333)
+            console.log(Calendar.Target.querySelector('.ant-calendar-month-select'), 'innerhte');
+
+            Calendar.Target.querySelector('.ant-calendar-month-select').innerHTML = this.dateOpt.month + 1 + '月';
             Calendar.Target.querySelector('tbody').innerHTML = this.getTemplate();
         },
         getTemplate: function() {
@@ -241,3 +263,10 @@
 var calendar = new Calendar({
     classN: 'calendar-item'
 });
+
+
+// todo:
+/*
+1.下一月到换年的时候有bug
+
+*/
