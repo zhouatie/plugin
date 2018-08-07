@@ -220,15 +220,26 @@
                 if (i%7 === 1) {
                     html += '<tr>'
                 }
+                var date = '';
+                var className = '';
                 if (i<currentMonthFirstDay) {
-                    html += '<td class="ant-calendar-cell ant-calendar-last-month-cell"><div class="ant-calendar-date">'+(lastMonthLastDate-currentMonthFirstDay+i+1)+'</div></td>';
+                    date = lastMonthLastDate-currentMonthFirstDay+i+1;
+                    className = 'ant-calendar-last-month-cell';
+                    // html += '<td class="ant-calendar-cell ant-calendar-last-month-cell"><div class="ant-calendar-date">'+(lastMonthLastDate-currentMonthFirstDay+i+1)+'</div></td>';
                 } else if (i>currentMonthFirstDay+currentMonthLastDay-1) {
-                    html += '<td class="ant-calendar-cell ant-calendar-next-month-btn-day"><div class="ant-calendar-date">'+(i-currentMonthFirstDay-currentMonthLastDay+1)+'</div></td>';
+                    date = i-currentMonthFirstDay-currentMonthLastDay+1;
+                    className = 'ant-calendar-next-month-btn-day';
+                    // html += '<td class="ant-calendar-cell ant-calendar-next-month-btn-day"><div class="ant-calendar-date">'+(i-currentMonthFirstDay-currentMonthLastDay+1)+'</div></td>';
                 } else {
-                    if (this.dateOpt.month === this.dateOpt.curMonth && this.dateOpt.curDate === (i-currentMonthFirstDay+1)) html += '<td class="ant-calendar-cell ant-calendar-today">';
-                    else html += '<td class="ant-calendar-cell">';
-                    html += '<div class="ant-calendar-date">'+(i-currentMonthFirstDay+1)+'</div></td>';
+                    // 今天
+                    if (this.dateOpt.year === this.dateOpt.curYear &&
+                        this.dateOpt.month === this.dateOpt.curMonth &&
+                        this.dateOpt.curDate === (i-currentMonthFirstDay+1)) className = 'ant-calendar-cell ant-calendar-today';
+                    date = i-currentMonthFirstDay+1;
                 }
+                // if (this.dateOpt.date === date) className += ' ant-calendar-selected-date';
+                html += '<td class="ant-calendar-cell '+ className +'"><div class="ant-calendar-date">'+date+'</div></td>';
+
                 if (i%7 === 7) {
                     html += '</tr>'
                 }

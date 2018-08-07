@@ -97,6 +97,16 @@
         .ant-calendar-last-month-cell .ant-calendar-date, .ant-calendar-next-month-btn-day .ant-calendar-date {
             color: rgba(0,0,0,.25);
         }
+        .ant-calendar-today .ant-calendar-date {
+            border-color: #1890ff;
+            font-weight: 700;
+            color: #1890ff;
+        }
+        .ant-calendar-selected-date .ant-calendar-date, .ant-calendar-selected-start-date .ant-calendar-date, .ant-calendar-selected-end-date .ant-calendar-date {
+            background: #1890ff;
+            color: #fff;
+            border: 1px solid transparent;
+        }
         .ant-calendar-date {
             display: block;
             margin: 0 auto;
@@ -111,11 +121,6 @@
             text-align: center;
             -webkit-transition: background .3s ease;
             transition: background .3s ease;
-        }
-        .ant-calendar-today .ant-calendar-date {
-            border-color: #1890ff;
-            font-weight: 700;
-            color: #1890ff;
         }
         .ant-calendar-footer {
             border-top: 1px solid #e8e8e8;
