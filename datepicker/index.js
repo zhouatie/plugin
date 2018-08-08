@@ -101,6 +101,9 @@
             _year: date.getFullYear(),
             _month: date.getMonth(),
             _date: date.getDate(),
+            selectYear: date.getFullYear(),
+            selectMonth: date.getMonth(),
+            selectDate: date.getDate(),
         }
         // 存储页面存在的calendar对象
         this.calendars = {};
@@ -153,7 +156,8 @@
                 set: function(newVal) {
                     if (newVal === this._year) return;
                     this._year = newVal;
-                    // self.render();
+                    // self.render()
+                    self.renderByYear();
                 }
             })
             Object.defineProperty(this.dateOpt, 'month', {
@@ -161,13 +165,14 @@
                     return this._month;
                 },
                 set: function(newVal) {
-                    if (newVal === this._month) return;
-                    if (newVal >= 12) {
+                    if (newVal >= 11) {
                         this.year++;
-                        this._month = newVal % 12;
+                        this._month = newVal % 11;
+                    } else if (newVal < 0) {
+                        this.year--;
+                        this._month = 11;
                     } else this._month = newVal;
-                    console.log(newVal, 'month change');
-                    self.render();
+                    self.renderByMonth();
                 }
             })
             Object.defineProperty(this.dateOpt, 'date', {
@@ -176,7 +181,6 @@
                 },
                 set: function(newVal) {
                     if (newVal === this._date) return;
-                    console.log(new Date(this.year,this.month+1,0))
                     if (newVal > new Date(this.year,this.month+1,0).getDate()) {
                         this._date = 1;
                         this.month++;
@@ -189,15 +193,21 @@
                 if (utils.hasClass(target, self.opt.classN)) {
                     self.openPanel(target);
                 } else if (utils.hasClass(target, 'ant-calendar-next-month-btn')) {
-                    console.log(333)
                     self.dateOpt.month++;
+                } else if (utils.hasClass(target, 'ant-calendar-prev-month-btn')) {
+                    self.dateOpt.month--;
+                } else if (utils.hasClass(target, 'ant-calendar-next-year-btn')) {
+                    self.dateOpt.year++;
+                } else if (utils.hasClass(target, 'ant-calendar-prev-year-btn')) {
+                    self.dateOpt.year--;
                 }
             }, false);
         },
-        render: function() {
-            console.log(333)
-            console.log(Calendar.Target.querySelector('.ant-calendar-month-select'), 'innerhte');
-
+        renderByYear: function() {
+            Calendar.Target.querySelector('.ant-calendar-year-select').innerHTML = this.dateOpt.year + '月';
+            Calendar.Target.querySelector('tbody').innerHTML = this.getTemplate();
+        },
+        renderByMonth: function() {
             Calendar.Target.querySelector('.ant-calendar-month-select').innerHTML = this.dateOpt.month + 1 + '月';
             Calendar.Target.querySelector('tbody').innerHTML = this.getTemplate();
         },
@@ -232,12 +242,13 @@
                     // html += '<td class="ant-calendar-cell ant-calendar-next-month-btn-day"><div class="ant-calendar-date">'+(i-currentMonthFirstDay-currentMonthLastDay+1)+'</div></td>';
                 } else {
                     // 今天
+                    date = i-currentMonthFirstDay+1;
                     if (this.dateOpt.year === this.dateOpt.curYear &&
                         this.dateOpt.month === this.dateOpt.curMonth &&
-                        this.dateOpt.curDate === (i-currentMonthFirstDay+1)) className = 'ant-calendar-cell ant-calendar-today';
-                    date = i-currentMonthFirstDay+1;
+                        this.dateOpt.curDate === date) className = 'ant-calendar-cell ant-calendar-today';
+                    if (this.dateOpt.selectYear === this.dateOpt.year && this.dateOpt.selectMonth === this.dateOpt.month && this.dateOpt.selectDate === date) className += ' ant-calendar-selected-date';
+                    if (this.dateOpt.date === date) className += ' ant-calendar-selected-day';
                 }
-                // if (this.dateOpt.date === date) className += ' ant-calendar-selected-date';
                 html += '<td class="ant-calendar-cell '+ className +'"><div class="ant-calendar-date">'+date+'</div></td>';
 
                 if (i%7 === 7) {
