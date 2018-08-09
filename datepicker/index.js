@@ -81,7 +81,7 @@
         },
         css: function(target, cssObj) {
             for(var prop in cssObj) {
-                target.style.prop = cssObj[prop];
+                target.style[prop] = cssObj[prop];
             }
             return target;
         },
@@ -185,6 +185,8 @@
                         this._date = 1;
                         this.month++;
                     }
+                    this._date = newVal;
+                    self.renderByMonth();
                 }
             })
             
@@ -200,6 +202,8 @@
                     self.dateOpt.year++;
                 } else if (utils.hasClass(target, 'ant-calendar-prev-year-btn')) {
                     self.dateOpt.year--;
+                } else if (utils.hasClass(target, 'ant-calendar-date')) {
+                    self.handleSelect(target);
                 }
             }, false);
         },
@@ -208,9 +212,13 @@
             Calendar.Target.querySelector('tbody').innerHTML = this.getTemplate();
         },
         renderByMonth: function() {
+            console.log('render by month');
             Calendar.Target.querySelector('.ant-calendar-month-select').innerHTML = this.dateOpt.month + 1 + '月';
             Calendar.Target.querySelector('tbody').innerHTML = this.getTemplate();
         },
+        // render: function() {
+        //     if ()
+        // },
         getTemplate: function() {
             // 当月第一天日期对象
             var currentMonthFirstDateObj = new Date(this.dateOpt.year, this.dateOpt.month, 1);
@@ -278,6 +286,19 @@
                 this.create(target);
             }
         },
+        handleSelect: function(target) {
+            var parentElem = target.parentNode;
+            if (utils.hasClass(parentElem, 'ant-calendar-next-month-btn-day')) {
+                this.dateOpt.month++;
+            } else if (utils.hasClass(parentElem, 'ant-calendar-last-month-btn-day')) {
+                this.dateOpt.month--;
+            }
+            this.dateOpt.selectYear = this.dateOpt.year;
+            this.dateOpt.selectMonth = this.dateOpt.month;
+            this.dateOpt.selectDate = parseInt(target.innerHTML);
+            this.dateOpt.date = parseInt(target.innerHTML);
+            utils.hide(Calendar.Target);
+        }
     }
     window.Calendar = Calendar;
 })()
