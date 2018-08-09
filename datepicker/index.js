@@ -216,9 +216,6 @@
             Calendar.Target.querySelector('.ant-calendar-month-select').innerHTML = this.dateOpt.month + 1 + '月';
             Calendar.Target.querySelector('tbody').innerHTML = this.getTemplate();
         },
-        // render: function() {
-        //     if ()
-        // },
         getTemplate: function() {
             // 当月第一天日期对象
             var currentMonthFirstDateObj = new Date(this.dateOpt.year, this.dateOpt.month, 1);
@@ -310,6 +307,8 @@ var calendar = new Calendar({
 
 // todo:
 /*
-1.下一月到换年的时候有bug
-
+1.点击今天按钮
+2.表单输入
+3.定位
+4.理下代码渲染的部分 换成vue的mvvm去实现渲染功能
 */
