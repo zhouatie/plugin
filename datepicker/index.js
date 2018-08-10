@@ -100,7 +100,7 @@
                 '<div class="ant-calendar-panel">' +
                 '<div class="ant-calendar-input-wrap">' +
                 '<div class="ant-calendar-date-input-wrap">' +
-                '<input class="ant-calendar-input " placeholder="请选择日期" value="'+ selectDate +'">' +
+                '<input class="ant-calendar-input " placeholder="请选择日期" value="' + selectDate + '">' +
                 '</div>' +
                 // '<a class="ant-calendar-clear-btn" role="button" title="清除"></a>' +
                 '</div>' +
@@ -110,8 +110,8 @@
                 '<a class="ant-calendar-prev-year-btn" role="button" title="上一年"><<</a>' +
                 '<a class="ant-calendar-prev-month-btn" role="button" title="上个月"><</a>' +
                 '<span class="ant-calendar-ym-select">' +
-                '<a class="ant-calendar-year-select" role="button">'+ this.dateOpt.year +'年</a>' +
-                '<a class="ant-calendar-month-select" role="button">'+ (this.dateOpt.month + 1) +'月</a>' +
+                '<a class="ant-calendar-year-select" role="button">' + this.dateOpt.year + '年</a>' +
+                '<a class="ant-calendar-month-select" role="button">' + (this.dateOpt.month + 1) + '月</a>' +
                 '</span>' +
                 '<a class="ant-calendar-next-month-btn" title="下个月">></a>' +
                 '<a class="ant-calendar-next-year-btn" title="下一年">>></a>' +
@@ -146,18 +146,18 @@
                 '</thead>' +
                 '<tbody class="ant-calendar-tbody">';
         },
-        getTemplate2: function() {
+        getTemplate2: function () {
             return '</tbody>' +
-            '</table>' +
-            '</div>' +
-            '<div class="ant-calendar-footer">' +
-            '<span class="ant-calendar-footer-btn">' +
-            '<a class="ant-calendar-today-btn " role="button" title="2018年8月3日">今天</a>' +
-            '</span>' +
-            '</div>' +
-            '</div>' +
-            '</div>' +
-            '</div>';
+                '</table>' +
+                '</div>' +
+                '<div class="ant-calendar-footer">' +
+                '<span class="ant-calendar-footer-btn">' +
+                '<a class="ant-calendar-today-btn " role="button" title="2018年8月3日">今天</a>' +
+                '</span>' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '</div>';
         },
         getTbodyTemplate: function () {
             // 当月第一天日期对象
@@ -245,7 +245,6 @@
                     return this._month;
                 },
                 set: function (newVal) {
-                    console.log(newVal, 'month new value');
                     if (newVal > 11) {
                         this.year++;
                         this._month = 0;
@@ -286,6 +285,12 @@
                     self.handleSelect(target);
                 } else if (utils.hasClass(target, 'ant-calendar-today-btn')) {
                     self.turnToToday(target);
+                }
+            }, false);
+            document.addEventListener('input', function (e) {
+                var target = e.target;
+                if (utils.hasClass(target, 'ant-calendar-input')) {
+                    self.handleInput(target);
                 }
             }, false);
         },
@@ -351,13 +356,26 @@
             }
             // utils.hide(Calendar.Target);
         },
-        turnToToday: function() {
+        turnToToday: function () {
             this.isYearChange = true;
             this.isSelected = true;
             var date = new Date();
             this.dateOpt.year = date.getFullYear();
             this.dateOpt.month = date.getMonth();
             this.dateOpt.date = date.getDate();
+        },
+        handleInput: function (target) {
+            var value = target.value;
+            var reg = /^[1-9]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/;
+            var regExp = new RegExp(reg);
+            if (regExp.test(value)) {
+                dateArr = value.split('-');
+                this.isYearChange = true;
+                this.isSelected = true;
+                this.dateOpt.year = parseInt(dateArr[0]);
+                this.dateOpt.month = parseInt(dateArr[1]) - 1;
+                this.dateOpt.date = parseInt(dateArr[2]);
+            }
         }
     }
     window.Calendar = Calendar;
