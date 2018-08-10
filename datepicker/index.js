@@ -95,6 +95,7 @@
 
     function Calendar(opt) {
         // 参数
+        this.timer = null; // 本插件异步全都用macroTask中的setTimeout来处理
         this.opt = {};
         var date = new Date();
         this.dateOpt = {
@@ -156,8 +157,7 @@
                 set: function(newVal) {
                     if (newVal === this._year) return;
                     this._year = newVal;
-                    // self.render()
-                    self.renderByYear();
+                    self.render()
                 }
             })
             Object.defineProperty(this.dateOpt, 'month', {
@@ -165,14 +165,14 @@
                     return this._month;
                 },
                 set: function(newVal) {
-                    if (newVal >= 11) {
+                    if (newVal > 11) {
                         this.year++;
-                        this._month = newVal % 11;
+                        this._month = 0;
                     } else if (newVal < 0) {
                         this.year--;
                         this._month = 11;
                     } else this._month = newVal;
-                    self.renderByMonth();
+                    self.render()
                 }
             })
             Object.defineProperty(this.dateOpt, 'date', {
@@ -186,7 +186,7 @@
                         this.month++;
                     }
                     this._date = newVal;
-                    self.renderByMonth();
+                    self.render();
                 }
             })
             
@@ -207,14 +207,47 @@
                 }
             }, false);
         },
-        renderByYear: function() {
-            Calendar.Target.querySelector('.ant-calendar-year-select').innerHTML = this.dateOpt.year + '月';
+        updateHtml: function(type) {
+            console.log('updateHtml type=>', type);
+            switch (type) {
+                case 'yearChange':
+                    this.dateOpt.selectYear = this.dateOpt.year;
+                    Calendar.Target.querySelector('.ant-calendar-year-select').innerHTML = this.dateOpt._year + '月';
+                    Calendar.Target.querySelector('.ant-calendar-month-select').innerHTML = this.dateOpt._month + 1 + '月';
+                    break;
+                case 'monthChange':
+                    this.dateOpt.selectMonth = this.dateOpt.month;
+                    Calendar.Target.querySelector('.ant-calendar-month-select').innerHTML = this.dateOpt._month + 1 + '月';
+                    break;
+                default:
+            }
+            this.dateOpt.selectDate = this.dateOpt.date;
+            Calendar.Target.querySelector('.ant-calendar-input ').value = this.dateOpt._year + '-' + (this.dateOpt._month + 1) + '-' + this.dateOpt._date;
             Calendar.Target.querySelector('tbody').innerHTML = this.getTemplate();
         },
-        renderByMonth: function() {
-            console.log('render by month');
-            Calendar.Target.querySelector('.ant-calendar-month-select').innerHTML = this.dateOpt.month + 1 + '月';
-            Calendar.Target.querySelector('tbody').innerHTML = this.getTemplate();
+        render: function() {
+            if (this.timer) return;
+            var self = this;
+
+            var fn = function() {
+                if (self.dateOpt.year != self.dateOpt.selectYear) {
+                    // 渲染1、2、3、4
+                    self.updateHtml('yearChange');
+                } else if (self.dateOpt.month != self.dateOpt.selectMonth) {
+                    // 渲染1、3、4
+                    self.updateHtml('monthChange');
+                } else if (self.dateOpt.date != self.dateOpt.selectDate) {
+                    // 渲染1、4
+                    self.updateHtml('dateChange');
+                }
+                self.timer = null;
+            }
+            // 宏任务渲染
+            if (typeof setImmediate !== 'undefined') {
+                self.timer = setImmediate(fn);
+            } else {
+                self.timer = setTimeout(fn, 0);
+            }
         },
         getTemplate: function() {
             // 当月第一天日期对象
@@ -240,11 +273,9 @@
                 if (i<currentMonthFirstDay) {
                     date = lastMonthLastDate-currentMonthFirstDay+i+1;
                     className = 'ant-calendar-last-month-cell';
-                    // html += '<td class="ant-calendar-cell ant-calendar-last-month-cell"><div class="ant-calendar-date">'+(lastMonthLastDate-currentMonthFirstDay+i+1)+'</div></td>';
                 } else if (i>currentMonthFirstDay+currentMonthLastDay-1) {
                     date = i-currentMonthFirstDay-currentMonthLastDay+1;
                     className = 'ant-calendar-next-month-btn-day';
-                    // html += '<td class="ant-calendar-cell ant-calendar-next-month-btn-day"><div class="ant-calendar-date">'+(i-currentMonthFirstDay-currentMonthLastDay+1)+'</div></td>';
                 } else {
                     // 今天
                     date = i-currentMonthFirstDay+1;
@@ -285,16 +316,13 @@
         },
         handleSelect: function(target) {
             var parentElem = target.parentNode;
+            this.dateOpt.date = parseInt(target.innerHTML);
             if (utils.hasClass(parentElem, 'ant-calendar-next-month-btn-day')) {
                 this.dateOpt.month++;
-            } else if (utils.hasClass(parentElem, 'ant-calendar-last-month-btn-day')) {
+            } else if (utils.hasClass(parentElem, 'ant-calendar-last-month-cell')) {
                 this.dateOpt.month--;
             }
-            this.dateOpt.selectYear = this.dateOpt.year;
-            this.dateOpt.selectMonth = this.dateOpt.month;
-            this.dateOpt.selectDate = parseInt(target.innerHTML);
-            this.dateOpt.date = parseInt(target.innerHTML);
-            utils.hide(Calendar.Target);
+            // utils.hide(Calendar.Target);
         }
     }
     window.Calendar = Calendar;
