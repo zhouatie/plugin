@@ -54,6 +54,30 @@
             user-select: none;
             border-bottom: 1px solid #e8e8e8;
         }
+        .ant-calendar-header>div>a {
+            position: absolute;
+            top: 0;
+            font-size: 12px;
+            cursor: pointer;
+        }
+        .ant-calendar-header>div>a:hover {
+            color: #1890ff;
+        }
+        .ant-calendar-prev-year-btn {
+            left: 7px;
+        }
+        .ant-calendar-prev-month-btn {
+            left: 36px;
+        }
+        .ant-calendar-next-year-btn {
+            right: 7px;
+        }
+        .ant-calendar-next-month-btn {
+            right: 36px;
+        }
+        .ant-calendar-ym-select {
+            font-weight: 500;
+        }
         .ant-calendar-body {
             padding: 8px 12px;
         }
@@ -81,10 +105,6 @@
             display: table-row;
             vertical-align: inherit;
             border-color: inherit;
-        }
-        .ant-calendar table, .ant-calendar td, .ant-calendar th {
-            border: 0;
-            text-align: center;
         }
         .ant-calendar-column-header .ant-calendar-column-header-inner {
             display: block;

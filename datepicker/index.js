@@ -10,14 +10,14 @@
                 '<div class="ant-calendar-date-panel">'+
                     '<div class="ant-calendar-header">'+
                         '<div style="position: relative;">'+
-                            '<a class="ant-calendar-prev-year-btn" role="button" title="上一年 (Control键加左方向键)">上一年</a>'+
-                            '<a class="ant-calendar-prev-month-btn" role="button" title="上个月 (翻页上键)">上个月</a>'+
+                            '<a class="ant-calendar-prev-year-btn" role="button" title="上一年"><<</a>'+
+                            '<a class="ant-calendar-prev-month-btn" role="button" title="上个月"><</a>'+
                             '<span class="ant-calendar-ym-select">'+
-                                '<a class="ant-calendar-year-select" role="button" title="选择年份">2018年</a>'+
-                                '<a class="ant-calendar-month-select" role="button" title="选择月份">8月</a>'+
+                                '<a class="ant-calendar-year-select" role="button">2018年</a>'+
+                                '<a class="ant-calendar-month-select" role="button">8月</a>'+
                             '</span>'+
-                            '<a class="ant-calendar-next-month-btn" title="下个月 (翻页下键)">下个月</a>'+
-                            '<a class="ant-calendar-next-year-btn" title="下一年 (Control键加右方向键)">下一年</a>'+
+                            '<a class="ant-calendar-next-month-btn" title="下个月">></a>'+
+                            '<a class="ant-calendar-next-year-btn" title="下一年">>></a>'+
                         '</div>'+
                     '</div>'+
                     '<div class="ant-calendar-body">'+
@@ -90,12 +90,18 @@
         },
         hide: function(target) {
             this.css(target, { display: 'none' });
+        },
+        formatDate: function(num) {
+            return num < 10 ? '0' + num : num;
         }
     };
 
     function Calendar(opt) {
         // 参数
         this.timer = null; // 本插件异步全都用macroTask中的setTimeout来处理
+        this.isSelected = false; // 是否触发了选择日期动作
+        this.isYearChange = false; // 是否触发了切换年
+        this.isMonthChange = false; // 是否触发了切换月份
         this.opt = {};
         var date = new Date();
         this.dateOpt = {
@@ -130,130 +136,26 @@
     Calendar.prototype = {
         constructor: Calendar,
         init: function() {
+            this.initState();
             this.initEvent();
         },
-        initEvent: function() {
-            var self = this;
-            
-            Object.defineProperty(this.dateOpt, 'curYear', {
-                get: function() {
-                    return new Date().getFullYear();
-                },
-            })
-            Object.defineProperty(this.dateOpt, 'curMonth', {
-                get: function() {
-                    return new Date().getMonth();
-                },
-            })
-            Object.defineProperty(this.dateOpt, 'curDate', {
-                get: function() {
-                    return new Date().getDate();
-                },
-            })
-            Object.defineProperty(this.dateOpt, 'year', {
-                get: function() {
-                    return this._year;
-                },
-                set: function(newVal) {
-                    if (newVal === this._year) return;
-                    this._year = newVal;
-                    self.render()
-                }
-            })
-            Object.defineProperty(this.dateOpt, 'month', {
-                get: function() {
-                    return this._month;
-                },
-                set: function(newVal) {
-                    if (newVal > 11) {
-                        this.year++;
-                        this._month = 0;
-                    } else if (newVal < 0) {
-                        this.year--;
-                        this._month = 11;
-                    } else this._month = newVal;
-                    self.render()
-                }
-            })
-            Object.defineProperty(this.dateOpt, 'date', {
-                get: function() {
-                    return this._date;
-                },
-                set: function(newVal) {
-                    if (newVal === this._date) return;
-                    if (newVal > new Date(this.year,this.month+1,0).getDate()) {
-                        this._date = 1;
-                        this.month++;
-                    }
-                    this._date = newVal;
-                    self.render();
-                }
-            })
-            
-            document.addEventListener('click', function(e) {
-                var target = e.target;
-                if (utils.hasClass(target, self.opt.classN)) {
-                    self.openPanel(target);
-                } else if (utils.hasClass(target, 'ant-calendar-next-month-btn')) {
-                    self.dateOpt.month++;
-                } else if (utils.hasClass(target, 'ant-calendar-prev-month-btn')) {
-                    self.dateOpt.month--;
-                } else if (utils.hasClass(target, 'ant-calendar-next-year-btn')) {
-                    self.dateOpt.year++;
-                } else if (utils.hasClass(target, 'ant-calendar-prev-year-btn')) {
-                    self.dateOpt.year--;
-                } else if (utils.hasClass(target, 'ant-calendar-date')) {
-                    self.handleSelect(target);
-                }
-            }, false);
-        },
-        updateHtml: function(type) {
-            console.log('updateHtml type=>', type);
-            switch (type) {
-                case 'yearChange':
-                    this.dateOpt.selectYear = this.dateOpt.year;
-                    Calendar.Target.querySelector('.ant-calendar-year-select').innerHTML = this.dateOpt._year + '月';
-                    Calendar.Target.querySelector('.ant-calendar-month-select').innerHTML = this.dateOpt._month + 1 + '月';
-                    break;
-                case 'monthChange':
-                    this.dateOpt.selectMonth = this.dateOpt.month;
-                    Calendar.Target.querySelector('.ant-calendar-month-select').innerHTML = this.dateOpt._month + 1 + '月';
-                    break;
-                default:
-            }
-            this.dateOpt.selectDate = this.dateOpt.date;
-            Calendar.Target.querySelector('.ant-calendar-input ').value = this.dateOpt._year + '-' + (this.dateOpt._month + 1) + '-' + this.dateOpt._date;
-            Calendar.Target.querySelector('tbody').innerHTML = this.getTemplate();
-        },
-        render: function() {
-            if (this.timer) return;
-            var self = this;
+        create: function(target) {
+            var only_key = +new Date();
+            var div = document.createElement('div');
 
-            var fn = function() {
-                if (self.dateOpt.year != self.dateOpt.selectYear) {
-                    // 渲染1、2、3、4
-                    self.updateHtml('yearChange');
-                } else if (self.dateOpt.month != self.dateOpt.selectMonth) {
-                    // 渲染1、3、4
-                    self.updateHtml('monthChange');
-                } else if (self.dateOpt.date != self.dateOpt.selectDate) {
-                    // 渲染1、4
-                    self.updateHtml('dateChange');
-                }
-                self.timer = null;
-            }
-            // 宏任务渲染
-            if (typeof setImmediate !== 'undefined') {
-                self.timer = setImmediate(fn);
-            } else {
-                self.timer = setTimeout(fn, 0);
-            }
+            utils.attr(target, Calendar.originOpt.PANELKEY, only_key);
+            utils.addClass(target, Calendar.originOpt.PICKERNAME);
+
+            div.className = Calendar.originOpt.PANELWRAPCLASS + ' ' + Calendar.originOpt.PANELSTR + only_key;
+            div.innerHTML = TEMPLATE1 + this.getTemplate(this.dateOpt.year, this.dateOpt.month) + TEMPLATE2;
+            Calendar.Target = div;
+            this.elem_container.appendChild(div);
         },
         getTemplate: function() {
             // 当月第一天日期对象
             var currentMonthFirstDateObj = new Date(this.dateOpt.year, this.dateOpt.month, 1);
             // 当月第一天星期
-            var currentMonthFirstDay = currentMonthFirstDateObj.getDay();
+            var currentMonthFirstDay = currentMonthFirstDateObj.getDay() || 7;
             // 当月最后一天日期对象
             var currentMonthLastDateObj = new Date(this.dateOpt.year, this.dateOpt.month+1, 0);
             // 当月最后一天日期
@@ -262,7 +164,7 @@
             var lastMonthLastDateObj = new Date(this.dateOpt.year, this.dateOpt.month, 0);
             // 上个月最后一天日期
             var lastMonthLastDate = lastMonthLastDateObj.getDate();
-            
+
             var html = '';
             for (var i=1;i<=42;i++) {
                 if (i%7 === 1) {
@@ -293,18 +195,6 @@
             }
             return html;
         },
-        create: function(target) {
-            var only_key = +new Date();
-            var div = document.createElement('div');
-
-            utils.attr(target, Calendar.originOpt.PANELKEY, only_key);
-            utils.addClass(target, Calendar.originOpt.PICKERNAME);
-
-            div.className = Calendar.originOpt.PANELWRAPCLASS + ' ' + Calendar.originOpt.PANELSTR + only_key;
-            div.innerHTML = TEMPLATE1 + this.getTemplate(this.dateOpt.year, this.dateOpt.month) + TEMPLATE2;
-            Calendar.Target = div;
-            this.elem_container.appendChild(div);
-        },
         openPanel: function(target) {
             if (utils.hasClass(target, Calendar.originOpt.PICKERNAME)) { // 说明该元素已经挂载
                 var only_key = utils.attr(target, Calendar.originOpt.PANELKEY);
@@ -314,7 +204,134 @@
                 this.create(target);
             }
         },
+        initState: function() {
+            var self = this;
+            Object.defineProperty(this.dateOpt, 'curYear', {
+                get: function() {
+                    return new Date().getFullYear();
+                },
+            })
+            Object.defineProperty(this.dateOpt, 'curMonth', {
+                get: function() {
+                    return new Date().getMonth();
+                },
+            })
+            Object.defineProperty(this.dateOpt, 'curDate', {
+                get: function() {
+                    return new Date().getDate();
+                },
+            })
+            Object.defineProperty(this.dateOpt, 'year', {
+                get: function() {
+                    return this._year;
+                },
+                set: function(newVal) {
+                    if (newVal === this._year) return;
+                    this._year = newVal;
+                    self.isYearChange = true;
+                    self.render()
+                }
+            })
+            Object.defineProperty(this.dateOpt, 'month', {
+                get: function() {
+                    return this._month;
+                },
+                set: function(newVal) {
+                    console.log(newVal, 'month new value');
+                    if (newVal > 11) {
+                        this.year++;
+                        this._month = 0;
+                    } else if (newVal < 0) {
+                        this.year--;
+                        this._month = 11;
+                    } else this._month = newVal;
+                    self.isMonthChange = true;
+                    self.render()
+                }
+            })
+            Object.defineProperty(this.dateOpt, 'date', {
+                get: function() {
+                    return this._date;
+                },
+                set: function(newVal) {
+                    this._date = newVal;
+                    self.render();
+                }
+            })
+        },
+        initEvent: function() {
+            var self = this;
+           
+            document.addEventListener('click', function(e) {
+                var target = e.target;
+                if (utils.hasClass(target, self.opt.classN)) {
+                    self.openPanel(target);
+                } else if (utils.hasClass(target, 'ant-calendar-next-month-btn')) {
+                    self.dateOpt.month++;
+                } else if (utils.hasClass(target, 'ant-calendar-prev-month-btn')) {
+                    self.dateOpt.month--;
+                } else if (utils.hasClass(target, 'ant-calendar-next-year-btn')) {
+                    self.dateOpt.year++;
+                } else if (utils.hasClass(target, 'ant-calendar-prev-year-btn')) {
+                    self.dateOpt.year--;
+                } else if (utils.hasClass(target, 'ant-calendar-date')) {
+                    self.handleSelect(target);
+                }
+            }, false);
+        },
+        updateHtml: function(type) {
+            console.log('updateHtml type=>', type);
+            switch (type) {
+                case 'yearChange':
+                    Calendar.Target.querySelector('.ant-calendar-year-select').innerHTML = this.dateOpt._year + '月';
+                    Calendar.Target.querySelector('.ant-calendar-month-select').innerHTML = this.dateOpt._month + 1 + '月';
+                    break;
+                case 'monthChange':
+                    Calendar.Target.querySelector('.ant-calendar-month-select').innerHTML = this.dateOpt._month + 1 + '月';
+                    break;
+                default:
+            }
+            if (this.isSelected) {
+                this.dateOpt.selectYear = this.dateOpt.year;
+                this.dateOpt.selectMonth = this.dateOpt.month;
+                this.dateOpt.selectDate = this.dateOpt.date;
+                Calendar.Target.querySelector('.ant-calendar-input ').value = this.dateOpt._year + '-' + utils.formatDate(this.dateOpt._month + 1) + '-' + utils.formatDate(this.dateOpt._date);
+            }
+            Calendar.Target.querySelector('tbody').innerHTML = this.getTemplate();
+            this.resetOnoff();
+        },
+        // 重置开关状态
+        resetOnoff: function() {
+            this.isSelected = false;
+            this.isMonthChange = false;
+            this.isYearChange = false;
+        },
+        render: function() {
+            if (this.timer) return;
+            var self = this;
+
+            var fn = function() {
+                if (self.isYearChange) {
+                    // 渲染1、2、3、4
+                    self.updateHtml('yearChange');
+                } else if (self.isMonthChange) {
+                    // 渲染1、3、4
+                    self.updateHtml('monthChange');
+                } else if (self.isSelected) {
+                    // 渲染1、4
+                    self.updateHtml('dateChange');
+                }
+                self.timer = null;
+            }
+            // 宏任务渲染
+            if (typeof setImmediate !== 'undefined') {
+                self.timer = setImmediate(fn);
+            } else {
+                self.timer = setTimeout(fn, 0);
+            }
+        },
         handleSelect: function(target) {
+            this.isSelected = true;
             var parentElem = target.parentNode;
             this.dateOpt.date = parseInt(target.innerHTML);
             if (utils.hasClass(parentElem, 'ant-calendar-next-month-btn-day')) {
