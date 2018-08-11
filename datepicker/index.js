@@ -36,16 +36,36 @@
         },
         formatDate: function (num) {
             return num < 10 ? '0' + num : num;
-        }
+        },
+        fadeOut: function(target) {
+            var opacity = 100;
+            var timer = null;
+            var _this = this;
+            timer = setInterval(function() {
+                console.log(opacity, 'opacit')
+                opacity -= opacity/10;
+                _this.css(target, {
+                    opacity: opacity/100
+                })
+                if (opacity <= 5) {
+                    clearInterval(timer);
+                    _this.css(target, {
+                        display: 'none',
+                        opacity: 1
+                    })
+                }
+            },10);
+        },
     };
 
-    function Calendar(opt) {
+    function Calendar(elem) {
         // 参数
+        this.bindElem = elem; // 绑定的元素
+        this.elem_wrap = null; // calendar-wrap
         this.timer = null; // 本插件异步全都用macroTask中的setTimeout来处理
         this.isSelected = false; // 是否触发了选择日期动作
         this.isYearChange = false; // 是否触发了切换年
         this.isMonthChange = false; // 是否触发了切换月份
-        this.opt = {};
         var date = new Date();
         this.dateOpt = {
             _year: date.getFullYear(),
@@ -55,32 +75,49 @@
             selectMonth: date.getMonth(),
             selectDate: date.getDate(),
         }
-        // 存储页面存在的calendar对象
-        this.calendars = {};
-
-        for (var prop in opt) {
-            this.opt[prop] = opt[prop];
-        }
 
         this.elem_container = document.querySelector('body');
         this.init();
 
     };
+    Calendar.create = function(opt) {
+        for(var prop in opt){
+            Calendar.Opt[prop] = opt[prop];
+        };
+        var elemArr = document.getElementsByClassName(Calendar.Opt.classN);
 
+        for(var i=0;i<elemArr.length;i++){
+            elemArr[i].calendar = new Calendar(elemArr[i]);
+        }
+    }
     Calendar.originOpt = {
         PICKERNAME: 'calendar-btn',
         PANELKEY: 'self-panel-key', // 存储picker对应的calendar的唯一key
         PANELSTR: 'calendar-panel_',
         PANELWRAPCLASS: 'calendar-wrap'
     }
-    Calendar.Target = null; // 当前打开的日历视图
+    Calendar.Opt = {
+        classN: ''
+    };
     Calendar.version = '1.0.0';
 
     Calendar.prototype = {
         constructor: Calendar,
         init: function () {
+            var _this = this;
             this.initState();
-            this.initEvent();
+            this.bindElem.addEventListener('click', function() {
+                _this.openPanel(this);
+            }, false);
+        },
+        openPanel: function (target) {
+            if (utils.hasClass(target, Calendar.originOpt.PICKERNAME)) { // 说明该元素已经挂载
+                var only_key = utils.attr(target, Calendar.originOpt.PANELKEY);
+                this.elem_wrap = document.querySelector('.' + Calendar.originOpt.PANELSTR + only_key);
+                utils.show(this.elem_wrap);
+            } else {
+                this.create(target);
+            }
         },
         create: function (target) {
             var only_key = +new Date();
@@ -91,12 +128,33 @@
 
             div.className = Calendar.originOpt.PANELWRAPCLASS + ' ' + Calendar.originOpt.PANELSTR + only_key;
             div.innerHTML = this.getTemplate1() + this.getTbodyTemplate(this.dateOpt.year, this.dateOpt.month) + this.getTemplate2();
-            Calendar.Target = div;
+            
+            this.elem_wrap = div;
+            this.elem_mask = div.children[0]; // 遮罩
+            this.elem_panel = div.children[1]; // 日期控件面板
+
+            var elem = target;
+            var top = elem.offsetTop;
+            var left = elem.offsetLeft;
+            while(elem.offsetParent) {
+                top += elem.offsetParent.offsetTop;
+                left += elem.offsetParent.offsetLeft;
+                elem = elem.offsetParent;
+            }
+            utils.css(this.elem_panel,{
+                "position": "absolute",
+                 "z-index": 2,
+                 "top": top + target.offsetHeight + 10 + "px",
+                 "left": left + "px"
+            });
+
             this.elem_container.appendChild(div);
+            this.initEvent();
         },
         getTemplate1: function () {
             var selectDate = this.dateOpt.year + '-' + utils.formatDate(this.dateOpt.month + 1) + '-' + utils.formatDate(this.dateOpt.date);
-            return '<div class="ant-calendar" tabindex="0">' +
+            return '<div class="ant-calendar-mask"></div>' +
+                '<div class="ant-calendar" tabindex="0">' +
                 '<div class="ant-calendar-panel">' +
                 '<div class="ant-calendar-input-wrap">' +
                 '<div class="ant-calendar-date-input-wrap">' +
@@ -203,15 +261,6 @@
             }
             return html;
         },
-        openPanel: function (target) {
-            if (utils.hasClass(target, Calendar.originOpt.PICKERNAME)) { // 说明该元素已经挂载
-                var only_key = utils.attr(target, Calendar.originOpt.PANELKEY);
-                Calendar.Target = document.querySelector('.' + Calendar.originOpt.PANELSTR + only_key);
-                utils.show(Calendar.Target);
-            } else {
-                this.create(target);
-            }
-        },
         initState: function () {
             var self = this;
             Object.defineProperty(this.dateOpt, 'curYear', {
@@ -268,10 +317,9 @@
         },
         initEvent: function () {
             var self = this;
-
-            document.addEventListener('click', function (e) {
+            this.elem_wrap.addEventListener('click', function (e) {
                 var target = e.target;
-                if (utils.hasClass(target, self.opt.classN)) {
+                if (utils.hasClass(target, Calendar.Opt.classN)) {
                     self.openPanel(target);
                 } else if (utils.hasClass(target, 'ant-calendar-next-month-btn')) {
                     self.dateOpt.month++;
@@ -287,6 +335,9 @@
                     self.turnToToday(target);
                 }
             }, false);
+            this.elem_mask.addEventListener('click', function() {
+                utils.fadeOut(self.elem_wrap);
+            }, false);
             document.addEventListener('input', function (e) {
                 var target = e.target;
                 if (utils.hasClass(target, 'ant-calendar-input')) {
@@ -298,11 +349,11 @@
             console.log('updateHtml type=>', type);
             switch (type) {
                 case 'yearChange':
-                    Calendar.Target.querySelector('.ant-calendar-year-select').innerHTML = this.dateOpt._year + '月';
-                    Calendar.Target.querySelector('.ant-calendar-month-select').innerHTML = this.dateOpt._month + 1 + '月';
+                    this.elem_wrap.querySelector('.ant-calendar-year-select').innerHTML = this.dateOpt._year + '月';
+                    this.elem_wrap.querySelector('.ant-calendar-month-select').innerHTML = this.dateOpt._month + 1 + '月';
                     break;
                 case 'monthChange':
-                    Calendar.Target.querySelector('.ant-calendar-month-select').innerHTML = this.dateOpt._month + 1 + '月';
+                    this.elem_wrap.querySelector('.ant-calendar-month-select').innerHTML = this.dateOpt._month + 1 + '月';
                     break;
                 default:
             }
@@ -310,9 +361,9 @@
                 this.dateOpt.selectYear = this.dateOpt.year;
                 this.dateOpt.selectMonth = this.dateOpt.month;
                 this.dateOpt.selectDate = this.dateOpt.date;
-                Calendar.Target.querySelector('.ant-calendar-input ').value = this.dateOpt._year + '-' + utils.formatDate(this.dateOpt._month + 1) + '-' + utils.formatDate(this.dateOpt._date);
+                this.elem_wrap.querySelector('.ant-calendar-input ').value = this.dateOpt._year + '-' + utils.formatDate(this.dateOpt._month + 1) + '-' + utils.formatDate(this.dateOpt._date);
             }
-            Calendar.Target.querySelector('tbody').innerHTML = this.getTbodyTemplate();
+            this.elem_wrap.querySelector('tbody').innerHTML = this.getTbodyTemplate();
             this.resetOnoff();
         },
         // 重置开关状态
@@ -354,7 +405,7 @@
             } else if (utils.hasClass(parentElem, 'ant-calendar-last-month-cell')) {
                 this.dateOpt.month--;
             }
-            // utils.hide(Calendar.Target);
+            utils.fadeOut(this.elem_wrap);
         },
         turnToToday: function () {
             this.isYearChange = true;
@@ -381,9 +432,12 @@
     window.Calendar = Calendar;
 })()
 
-var calendar = new Calendar({
+// var calendar = new Calendar({
+//     classN: 'calendar-item'
+// });
+Calendar.create({
     classN: 'calendar-item'
-});
+})
 
 
 // todo:
