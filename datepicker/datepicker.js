@@ -162,7 +162,6 @@
                 '<div class="atie-calendar-date-input-wrap">' +
                 '<input class="atie-calendar-input " placeholder="请选择日期" value="' + selectDate + '">' +
                 '</div>' +
-                // '<a class="atie-calendar-clear-btn" role="button" title="清除"></a>' +
                 '</div>' +
                 '<div class="atie-calendar-date-panel">' +
                 '<div class="atie-calendar-header">' +
@@ -212,7 +211,7 @@
                 '</div>' +
                 '<div class="atie-calendar-footer">' +
                 '<span class="atie-calendar-footer-btn">' +
-                '<a class="atie-calendar-today-btn " role="button" title="2018年8月3日">今天</a>' +
+                '<a class="atie-calendar-today-btn " role="button" title="'+ this.dateOpt.curYear +'年'+ (this.dateOpt.curMonth + 1) +'月'+ this.dateOpt.curDate +'日">今天</a>' +
                 '</span>' +
                 '</div>' +
                 '</div>' +
@@ -345,7 +344,6 @@
             this.elem_wrap.addEventListener('input', function (e) {
                 var target = e.target;
                 if (utils.hasClass(target, 'atie-calendar-input')) {
-                    console.log('trigger input')
                     self.handleInput(target);
                 }
             }, false);
