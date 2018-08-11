@@ -205,16 +205,24 @@
             this.elem_inputWrap = div.getElementsByClassName("colorpicker-inputWrap")[0];
             this.elem_opacityPancel = this.elem_barPicker2.parentNode.parentNode.children[1];
 
-            var rect = this.bindElem.getBoundingClientRect();
+            // var rect = this.bindElem.getBoundingClientRect();
+            var elem = this.bindElem;
+            var top = elem.offsetTop;
+            var left = elem.offsetLeft;
+            while(elem.offsetParent) {
+                top += elem.offsetParent.offsetTop;
+                left += elem.offsetParent.offsetLeft;
+                elem = elem.offsetParent;
+            }
 
-            this.pancelLeft = rect.left;
-            this.pancelTop = rect.bottom;
+            this.pancelLeft = left;
+            this.pancelTop = top + this.bindElem.offsetHeight;
             util.css(div,{
                 "position": "absolute",
                  "z-index": 2,
                  "display": 'none',
-                 "top": rect.bottom+"px",
-                 "left": rect.left+"px"
+                 "left": left + "px",
+                 "top": top + this.bindElem.offsetHeight + "px"
             });
 
             this.bindMove(this.elem_colorPancel,this.setPosition,true);
