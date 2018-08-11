@@ -7,6 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>calendar</title>
     <link rel="stylesheet" href="./datepicker.css">
+    <script src="./index.js"></script>
     <style>
         html {
             height: 100%;
@@ -19,6 +20,14 @@
 
 <body>
     <div style="height: 150px;width: 150px;background: red;position: absolute;left:20%;top: 30%;" class="calendar-item">calendar-item</div>
+    <div style="height: 150px;width: 150px;background: red;position: absolute;left:60%;top: 60%;" class="calendar-item">calendar-item</div>
 </body>
-<script src="./index.js"></script>
+<script>
+    Calendar.create({
+        classN: 'calendar-item',
+        callBack: function(bindElem, dateObj) {
+            bindElem.innerHTML = dateObj.year + '-' + dateObj.month + '-' + dateObj.date;
+        }
+    })
+</script>
 </html>

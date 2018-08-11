@@ -42,10 +42,9 @@
             var timer = null;
             var _this = this;
             timer = setInterval(function() {
-                console.log(opacity, 'opacit')
-                opacity -= opacity/10;
-                _this.css(target, {
-                    opacity: opacity/100
+                opacity -= opacity / 20;
+                opacity < 80 && _this.css(target, {
+                    opacity: opacity / 100
                 })
                 if (opacity <= 5) {
                     clearInterval(timer);
@@ -97,7 +96,8 @@
         PANELWRAPCLASS: 'calendar-wrap'
     }
     Calendar.Opt = {
-        classN: ''
+        classN: '',
+        callBack: function(bindElem, selectDate) {}
     };
     Calendar.version = '1.0.0';
 
@@ -129,10 +129,11 @@
             div.className = Calendar.originOpt.PANELWRAPCLASS + ' ' + Calendar.originOpt.PANELSTR + only_key;
             div.innerHTML = this.getTemplate1() + this.getTbodyTemplate(this.dateOpt.year, this.dateOpt.month) + this.getTemplate2();
             
-            this.elem_wrap = div;
+            this.elem_wrap = div; // 控件容器
             this.elem_mask = div.children[0]; // 遮罩
-            this.elem_panel = div.children[1]; // 日期控件面板
+            this.elem_panel = div.children[1]; // 控件面板
 
+            // 设置定位位置
             var elem = target;
             var top = elem.offsetTop;
             var left = elem.offsetLeft;
@@ -141,6 +142,7 @@
                 left += elem.offsetParent.offsetLeft;
                 elem = elem.offsetParent;
             }
+
             utils.css(this.elem_panel,{
                 "position": "absolute",
                  "z-index": 2,
@@ -335,12 +337,15 @@
                     self.turnToToday(target);
                 }
             }, false);
+            // 点击遮罩隐藏
             this.elem_mask.addEventListener('click', function() {
                 utils.fadeOut(self.elem_wrap);
             }, false);
-            document.addEventListener('input', function (e) {
+            // 表单输入
+            this.elem_wrap.addEventListener('input', function (e) {
                 var target = e.target;
                 if (utils.hasClass(target, 'ant-calendar-input')) {
+                    console.log('trigger input')
                     self.handleInput(target);
                 }
             }, false);
@@ -362,6 +367,12 @@
                 this.dateOpt.selectMonth = this.dateOpt.month;
                 this.dateOpt.selectDate = this.dateOpt.date;
                 this.elem_wrap.querySelector('.ant-calendar-input ').value = this.dateOpt._year + '-' + utils.formatDate(this.dateOpt._month + 1) + '-' + utils.formatDate(this.dateOpt._date);
+                // callback
+                Calendar.Opt.callBack && Calendar.Opt.callBack(this.bindElem, {
+                    year: this.dateOpt.selectYear,
+                    month: this.dateOpt.selectMonth + 1,
+                    date: this.dateOpt.selectDate
+                });
             }
             this.elem_wrap.querySelector('tbody').innerHTML = this.getTbodyTemplate();
             this.resetOnoff();
@@ -414,6 +425,7 @@
             this.dateOpt.year = date.getFullYear();
             this.dateOpt.month = date.getMonth();
             this.dateOpt.date = date.getDate();
+            utils.fadeOut(this.elem_wrap);
         },
         handleInput: function (target) {
             var value = target.value;
@@ -423,27 +435,11 @@
                 dateArr = value.split('-');
                 this.isYearChange = true;
                 this.isSelected = true;
-                this.dateOpt.year = parseInt(dateArr[0]);
-                this.dateOpt.month = parseInt(dateArr[1]) - 1;
                 this.dateOpt.date = parseInt(dateArr[2]);
+                this.dateOpt.month = parseInt(dateArr[1]) - 1;
+                this.dateOpt.year = parseInt(dateArr[0]);
             }
         }
     }
     window.Calendar = Calendar;
 })()
-
-// var calendar = new Calendar({
-//     classN: 'calendar-item'
-// });
-Calendar.create({
-    classN: 'calendar-item'
-})
-
-
-// todo:
-/*
-1.点击今天按钮
-2.表单输入
-3.定位
-4.理下代码渲染的部分 换成vue的mvvm去实现渲染功能
-*/
