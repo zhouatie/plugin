@@ -15,12 +15,21 @@
         body {
             height: 2000px;
         }
+        .calendar-item {
+            position: absolute;
+            height: 30px;
+            width: 200px;
+            padding-left: 10px;
+            line-height: 28px;
+            border: 1px solid #ccc;
+            border-radius: 2px;
+        }
     </style>
 </head>
 
 <body>
-    <div style="height: 150px;width: 150px;background: red;position: absolute;left:20%;top: 30%;" class="calendar-item">calendar-item</div>
-    <div style="height: 150px;width: 150px;background: red;position: absolute;left:60%;top: 60%;" class="calendar-item">calendar-item</div>
+    <div style="left:20%;top: 30%;" class="calendar-item">calendar-item</div>
+    <div style="left:60%;top: 60%;" class="calendar-item">calendar-item</div>
 </body>
 <script>
     Calendar.create({
