@@ -155,64 +155,64 @@
         },
         getTemplate1: function () {
             var selectDate = this.dateOpt.year + '-' + utils.formatDate(this.dateOpt.month + 1) + '-' + utils.formatDate(this.dateOpt.date);
-            return '<div class="ant-calendar-mask"></div>' +
-                '<div class="ant-calendar" tabindex="0">' +
-                '<div class="ant-calendar-panel">' +
-                '<div class="ant-calendar-input-wrap">' +
-                '<div class="ant-calendar-date-input-wrap">' +
-                '<input class="ant-calendar-input " placeholder="请选择日期" value="' + selectDate + '">' +
+            return '<div class="atie-calendar-mask"></div>' +
+                '<div class="atie-calendar" tabindex="0">' +
+                '<div class="atie-calendar-panel">' +
+                '<div class="atie-calendar-input-wrap">' +
+                '<div class="atie-calendar-date-input-wrap">' +
+                '<input class="atie-calendar-input " placeholder="请选择日期" value="' + selectDate + '">' +
                 '</div>' +
-                // '<a class="ant-calendar-clear-btn" role="button" title="清除"></a>' +
+                // '<a class="atie-calendar-clear-btn" role="button" title="清除"></a>' +
                 '</div>' +
-                '<div class="ant-calendar-date-panel">' +
-                '<div class="ant-calendar-header">' +
+                '<div class="atie-calendar-date-panel">' +
+                '<div class="atie-calendar-header">' +
                 '<div style="position: relative;">' +
-                '<a class="ant-calendar-prev-year-btn" role="button" title="上一年"><<</a>' +
-                '<a class="ant-calendar-prev-month-btn" role="button" title="上个月"><</a>' +
-                '<span class="ant-calendar-ym-select">' +
-                '<a class="ant-calendar-year-select" role="button">' + this.dateOpt.year + '年</a>' +
-                '<a class="ant-calendar-month-select" role="button">' + (this.dateOpt.month + 1) + '月</a>' +
+                '<a class="atie-calendar-prev-year-btn" role="button" title="上一年"><<</a>' +
+                '<a class="atie-calendar-prev-month-btn" role="button" title="上个月"><</a>' +
+                '<span class="atie-calendar-ym-select">' +
+                '<a class="atie-calendar-year-select" role="button">' + this.dateOpt.year + '年</a>' +
+                '<a class="atie-calendar-month-select" role="button">' + (this.dateOpt.month + 1) + '月</a>' +
                 '</span>' +
-                '<a class="ant-calendar-next-month-btn" title="下个月">></a>' +
-                '<a class="ant-calendar-next-year-btn" title="下一年">>></a>' +
+                '<a class="atie-calendar-next-month-btn" title="下个月">></a>' +
+                '<a class="atie-calendar-next-year-btn" title="下一年">>></a>' +
                 '</div>' +
                 '</div>' +
-                '<div class="ant-calendar-body">' +
-                '<table class="ant-calendar-table" cellspacing="0" role="grid">' +
+                '<div class="atie-calendar-body">' +
+                '<table class="atie-calendar-table" cellspacing="0" role="grid">' +
                 '<thead>' +
                 '<tr role="row">' +
-                '<th role="columnheader" title="周一" class="ant-calendar-column-header">' +
-                '<span class="ant-calendar-column-header-inner">一</span>' +
+                '<th role="columnheader" title="周一" class="atie-calendar-column-header">' +
+                '<span class="atie-calendar-column-header-inner">一</span>' +
                 '</th>' +
-                '<th role="columnheader" title="周二" class="ant-calendar-column-header">' +
-                '<span class="ant-calendar-column-header-inner">二</span>' +
+                '<th role="columnheader" title="周二" class="atie-calendar-column-header">' +
+                '<span class="atie-calendar-column-header-inner">二</span>' +
                 '</th>' +
-                '<th role="columnheader" title="周三" class="ant-calendar-column-header">' +
-                '<span class="ant-calendar-column-header-inner">三</span>' +
+                '<th role="columnheader" title="周三" class="atie-calendar-column-header">' +
+                '<span class="atie-calendar-column-header-inner">三</span>' +
                 '</th>' +
-                '<th role="columnheader" title="周四" class="ant-calendar-column-header">' +
-                '<span class="ant-calendar-column-header-inner">四</span>' +
+                '<th role="columnheader" title="周四" class="atie-calendar-column-header">' +
+                '<span class="atie-calendar-column-header-inner">四</span>' +
                 '</th>' +
-                '<th role="columnheader" title="周五" class="ant-calendar-column-header">' +
-                '<span class="ant-calendar-column-header-inner">五</span>' +
+                '<th role="columnheader" title="周五" class="atie-calendar-column-header">' +
+                '<span class="atie-calendar-column-header-inner">五</span>' +
                 '</th>' +
-                '<th role="columnheader" title="周六" class="ant-calendar-column-header">' +
-                '<span class="ant-calendar-column-header-inner">六</span>' +
+                '<th role="columnheader" title="周六" class="atie-calendar-column-header">' +
+                '<span class="atie-calendar-column-header-inner">六</span>' +
                 '</th>' +
-                '<th role="columnheader" title="周日" class="ant-calendar-column-header">' +
-                '<span class="ant-calendar-column-header-inner">日</span>' +
+                '<th role="columnheader" title="周日" class="atie-calendar-column-header">' +
+                '<span class="atie-calendar-column-header-inner">日</span>' +
                 '</th>' +
                 '</tr>' +
                 '</thead>' +
-                '<tbody class="ant-calendar-tbody">';
+                '<tbody class="atie-calendar-tbody">';
         },
         getTemplate2: function () {
             return '</tbody>' +
                 '</table>' +
                 '</div>' +
-                '<div class="ant-calendar-footer">' +
-                '<span class="ant-calendar-footer-btn">' +
-                '<a class="ant-calendar-today-btn " role="button" title="2018年8月3日">今天</a>' +
+                '<div class="atie-calendar-footer">' +
+                '<span class="atie-calendar-footer-btn">' +
+                '<a class="atie-calendar-today-btn " role="button" title="2018年8月3日">今天</a>' +
                 '</span>' +
                 '</div>' +
                 '</div>' +
@@ -242,20 +242,20 @@
                 var className = '';
                 if (i < currentMonthFirstDay) {
                     date = lastMonthLastDate - currentMonthFirstDay + i + 1;
-                    className = 'ant-calendar-last-month-cell';
+                    className = 'atie-calendar-last-month-cell';
                 } else if (i > currentMonthFirstDay + currentMonthLastDay - 1) {
                     date = i - currentMonthFirstDay - currentMonthLastDay + 1;
-                    className = 'ant-calendar-next-month-btn-day';
+                    className = 'atie-calendar-next-month-btn-day';
                 } else {
                     // 今天
                     date = i - currentMonthFirstDay + 1;
                     if (this.dateOpt.year === this.dateOpt.curYear &&
                         this.dateOpt.month === this.dateOpt.curMonth &&
-                        this.dateOpt.curDate === date) className = 'ant-calendar-cell ant-calendar-today';
-                    if (this.dateOpt.selectYear === this.dateOpt.year && this.dateOpt.selectMonth === this.dateOpt.month && this.dateOpt.selectDate === date) className += ' ant-calendar-selected-date';
-                    if (this.dateOpt.date === date) className += ' ant-calendar-selected-day';
+                        this.dateOpt.curDate === date) className = 'atie-calendar-cell atie-calendar-today';
+                    if (this.dateOpt.selectYear === this.dateOpt.year && this.dateOpt.selectMonth === this.dateOpt.month && this.dateOpt.selectDate === date) className += ' atie-calendar-selected-date';
+                    if (this.dateOpt.date === date) className += ' atie-calendar-selected-day';
                 }
-                html += '<td class="ant-calendar-cell ' + className + '"><div class="ant-calendar-date">' + date + '</div></td>';
+                html += '<td class="atie-calendar-cell ' + className + '"><div class="atie-calendar-date">' + date + '</div></td>';
 
                 if (i % 7 === 7) {
                     html += '</tr>'
@@ -323,17 +323,17 @@
                 var target = e.target;
                 if (utils.hasClass(target, Calendar.Opt.classN)) {
                     self.openPanel(target);
-                } else if (utils.hasClass(target, 'ant-calendar-next-month-btn')) {
+                } else if (utils.hasClass(target, 'atie-calendar-next-month-btn')) {
                     self.dateOpt.month++;
-                } else if (utils.hasClass(target, 'ant-calendar-prev-month-btn')) {
+                } else if (utils.hasClass(target, 'atie-calendar-prev-month-btn')) {
                     self.dateOpt.month--;
-                } else if (utils.hasClass(target, 'ant-calendar-next-year-btn')) {
+                } else if (utils.hasClass(target, 'atie-calendar-next-year-btn')) {
                     self.dateOpt.year++;
-                } else if (utils.hasClass(target, 'ant-calendar-prev-year-btn')) {
+                } else if (utils.hasClass(target, 'atie-calendar-prev-year-btn')) {
                     self.dateOpt.year--;
-                } else if (utils.hasClass(target, 'ant-calendar-date')) {
+                } else if (utils.hasClass(target, 'atie-calendar-date')) {
                     self.handleSelect(target);
-                } else if (utils.hasClass(target, 'ant-calendar-today-btn')) {
+                } else if (utils.hasClass(target, 'atie-calendar-today-btn')) {
                     self.turnToToday(target);
                 }
             }, false);
@@ -344,7 +344,7 @@
             // 表单输入
             this.elem_wrap.addEventListener('input', function (e) {
                 var target = e.target;
-                if (utils.hasClass(target, 'ant-calendar-input')) {
+                if (utils.hasClass(target, 'atie-calendar-input')) {
                     console.log('trigger input')
                     self.handleInput(target);
                 }
@@ -354,11 +354,11 @@
             console.log('updateHtml type=>', type);
             switch (type) {
                 case 'yearChange':
-                    this.elem_wrap.querySelector('.ant-calendar-year-select').innerHTML = this.dateOpt._year + '月';
-                    this.elem_wrap.querySelector('.ant-calendar-month-select').innerHTML = this.dateOpt._month + 1 + '月';
+                    this.elem_wrap.querySelector('.atie-calendar-year-select').innerHTML = this.dateOpt._year + '月';
+                    this.elem_wrap.querySelector('.atie-calendar-month-select').innerHTML = this.dateOpt._month + 1 + '月';
                     break;
                 case 'monthChange':
-                    this.elem_wrap.querySelector('.ant-calendar-month-select').innerHTML = this.dateOpt._month + 1 + '月';
+                    this.elem_wrap.querySelector('.atie-calendar-month-select').innerHTML = this.dateOpt._month + 1 + '月';
                     break;
                 default:
             }
@@ -366,7 +366,7 @@
                 this.dateOpt.selectYear = this.dateOpt.year;
                 this.dateOpt.selectMonth = this.dateOpt.month;
                 this.dateOpt.selectDate = this.dateOpt.date;
-                this.elem_wrap.querySelector('.ant-calendar-input ').value = this.dateOpt._year + '-' + utils.formatDate(this.dateOpt._month + 1) + '-' + utils.formatDate(this.dateOpt._date);
+                this.elem_wrap.querySelector('.atie-calendar-input ').value = this.dateOpt._year + '-' + utils.formatDate(this.dateOpt._month + 1) + '-' + utils.formatDate(this.dateOpt._date);
                 // callback
                 Calendar.Opt.callBack && Calendar.Opt.callBack(this.bindElem, {
                     year: this.dateOpt.selectYear,
@@ -411,9 +411,9 @@
             this.isSelected = true;
             var parentElem = target.parentNode;
             this.dateOpt.date = parseInt(target.innerHTML);
-            if (utils.hasClass(parentElem, 'ant-calendar-next-month-btn-day')) {
+            if (utils.hasClass(parentElem, 'atie-calendar-next-month-btn-day')) {
                 this.dateOpt.month++;
-            } else if (utils.hasClass(parentElem, 'ant-calendar-last-month-cell')) {
+            } else if (utils.hasClass(parentElem, 'atie-calendar-last-month-cell')) {
                 this.dateOpt.month--;
             }
             utils.fadeOut(this.elem_wrap);

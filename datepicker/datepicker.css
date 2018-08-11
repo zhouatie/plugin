@@ -1,4 +1,4 @@
-.ant-calendar, .ant-calendar * {
+.atie-calendar, .atie-calendar * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -8,12 +8,12 @@
     left: 0;
     top: 0;
 }
-.ant-calendar-mask {
+.atie-calendar-mask {
     position: fixed;
     height: 100%;
     width: 100%;
 }
-.ant-calendar {
+.atie-calendar {
     position: relative;
     outline: none;
     width: 280px;
@@ -28,12 +28,12 @@
     background-clip: padding-box;
     line-height: 1.5;
 }
-.ant-calendar-input-wrap {
+.atie-calendar-input-wrap {
     height: 34px;
     padding: 6px 10px;
     border-bottom: 1px solid #e8e8e8;
 }
-.ant-calendar-input {
+.atie-calendar-input {
     border: 0;
     width: 100%;
     cursor: auto;
@@ -42,10 +42,10 @@
     color: rgba(0,0,0,.65);
     background: #fff;
 }
-.ant-calendar-date-panel {
+.atie-calendar-date-panel {
     position: relative;
 }
-.ant-calendar-header {
+.atie-calendar-header {
     height: 40px;
     line-height: 40px;
     text-align: center;
@@ -55,84 +55,84 @@
     user-select: none;
     border-bottom: 1px solid #e8e8e8;
 }
-.ant-calendar-header>div>a {
+.atie-calendar-header>div>a {
     position: absolute;
     top: 0;
     font-size: 12px;
     cursor: pointer;
 }
-.ant-calendar-header>div>a:hover {
+.atie-calendar-header>div>a:hover {
     color: #1890ff;
 }
-.ant-calendar-prev-year-btn {
+.atie-calendar-prev-year-btn {
     left: 7px;
 }
-.ant-calendar-prev-month-btn {
+.atie-calendar-prev-month-btn {
     left: 36px;
 }
-.ant-calendar-next-year-btn {
+.atie-calendar-next-year-btn {
     right: 7px;
 }
-.ant-calendar-next-month-btn {
+.atie-calendar-next-month-btn {
     right: 36px;
 }
-.ant-calendar-ym-select {
+.atie-calendar-ym-select {
     font-weight: 500;
 }
-.ant-calendar-body {
+.atie-calendar-body {
     padding: 8px 12px;
 }
-.ant-calendar table, .ant-calendar td, .ant-calendar th {
+.atie-calendar table, .atie-calendar td, .atie-calendar th {
     border: 0;
     text-align: center;
 }
-.ant-calendar table {
+.atie-calendar table {
     border-collapse: collapse;
     max-width: 100%;
     background-color: transparent;
     width: 100%;
 }
-.ant-calendar thead {
+.atie-calendar thead {
     display: table-header-group;
     vertical-align: middle;
     border-color: inherit;
 }
-.ant-calendar tbody {
+.atie-calendar tbody {
     display: table-row-group;
     vertical-align: middle;
     border-color: inherit;
 }
-.ant-calendar tr {
+.atie-calendar tr {
     display: table-row;
     vertical-align: inherit;
     border-color: inherit;
 }
-.ant-calendar-column-header .ant-calendar-column-header-inner {
+.atie-calendar-column-header .atie-calendar-column-header-inner {
     display: block;
     font-weight: 400;
 }
-.ant-calendar-cell {
+.atie-calendar-cell {
     padding: 3px 0;
     height: 30px;
     cursor: pointer;
 }
-.ant-calendar-selected-day .ant-calendar-date {
+.atie-calendar-selected-day .atie-calendar-date {
     background: #d1e9ff;
 }
-.ant-calendar-last-month-cell .ant-calendar-date, .ant-calendar-next-month-btn-day .ant-calendar-date {
+.atie-calendar-last-month-cell .atie-calendar-date, .atie-calendar-next-month-btn-day .atie-calendar-date {
     color: rgba(0,0,0,.25);
 }
-.ant-calendar-today .ant-calendar-date {
+.atie-calendar-today .atie-calendar-date {
     border-color: #1890ff;
     font-weight: 700;
     color: #1890ff;
 }
-.ant-calendar-selected-date .ant-calendar-date, .ant-calendar-selected-start-date .ant-calendar-date, .ant-calendar-selected-end-date .ant-calendar-date {
+.atie-calendar-selected-date .atie-calendar-date, .atie-calendar-selected-start-date .atie-calendar-date, .atie-calendar-selected-end-date .atie-calendar-date {
     background: #1890ff;
     color: #fff;
     border: 1px solid transparent;
 }
-.ant-calendar-date {
+.atie-calendar-date {
     display: block;
     margin: 0 auto;
     color: rgba(0,0,0,.65);
@@ -147,16 +147,16 @@
     -webkit-transition: background .3s ease;
     transition: background .3s ease;
 }
-.ant-calendar-footer {
+.atie-calendar-footer {
     border-top: 1px solid #e8e8e8;
     line-height: 38px;
     padding: 0 12px;
 }
-.ant-calendar-footer-btn {
+.atie-calendar-footer-btn {
     text-align: center;
     display: block;
 }
-.ant-calendar .ant-calendar-today-btn {
+.atie-calendar .atie-calendar-today-btn {
     display: inline-block;
     text-align: center;
     color: #1890ff;
