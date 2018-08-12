@@ -7,7 +7,7 @@
 > [在线预览](https://zhouatie.github.io/plugin/datepicker/datepicker.html)
 
 ### 预览
-![拾色器](https://github.com/zhouatie/plugin/raw/master/datepicker/data/datepicker.gif)
+![日期选择器](https://github.com/zhouatie/plugin/raw/master/datepicker/data/datepicker.gif)
 
 ### 准备
 首先在页面中引入css、js文件(文件在我的github，如何引入可看github示例html)
