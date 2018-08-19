@@ -25,11 +25,15 @@
             return target;
         },
         show: function (target) {
+            this.attr(target, 'isShow', 'on');
+            clearInterval(target.timer);
             this.css(target, {
-                display: 'block'
+                display: 'block',
+                opacity: 1
             });
         },
         hide: function (target) {
+            this.attr(target, 'isShow', 'off');
             this.css(target, {
                 display: 'none'
             });
@@ -38,16 +42,17 @@
             return num < 10 ? '0' + num : num;
         },
         fadeOut: function(target) {
+            if (this.attr(target, 'isShow') == 'off') return;
+            this.attr(target, 'isShow', 'off');
             var opacity = 100;
-            var timer = null;
             var _this = this;
-            timer = setInterval(function() {
+            target.timer = setInterval(function() {
                 opacity -= opacity / 20;
                 opacity < 80 && _this.css(target, {
                     opacity: opacity / 100
                 })
                 if (opacity <= 5) {
-                    clearInterval(timer);
+                    clearInterval(target.timer);
                     _this.css(target, {
                         display: 'none',
                         opacity: 1
@@ -106,15 +111,17 @@
         init: function () {
             var _this = this;
             this.initState();
-            this.bindElem.addEventListener('click', function() {
+            this.bindElem.addEventListener('click', function(e) {
                 _this.openPanel(this);
+                e.stopPropagation();
             }, false);
         },
         openPanel: function (target) {
             if (utils.hasClass(target, Calendar.originOpt.PICKERNAME)) { // 说明该元素已经挂载
                 var only_key = utils.attr(target, Calendar.originOpt.PANELKEY);
                 this.elem_wrap = document.querySelector('.' + Calendar.originOpt.PANELSTR + only_key);
-                utils.show(this.elem_wrap);
+                if (utils.attr(this.elem_wrap, 'isShow') == 'off') utils.show(this.elem_wrap);
+                else utils.fadeOut(this.elem_wrap);
             } else {
                 this.create(target);
             }
@@ -128,10 +135,9 @@
 
             div.className = Calendar.originOpt.PANELWRAPCLASS + ' ' + Calendar.originOpt.PANELSTR + only_key;
             div.innerHTML = this.getTemplate1() + this.getTbodyTemplate(this.dateOpt.year, this.dateOpt.month) + this.getTemplate2();
-            
+            utils.attr(div, 'isShow', 'on');
             this.elem_wrap = div; // 控件容器
-            this.elem_mask = div.children[0]; // 遮罩
-            this.elem_panel = div.children[1]; // 控件面板
+            this.elem_panel = div.children[0]; // 控件面板
 
             // 设置定位位置
             var elem = target;
@@ -155,8 +161,7 @@
         },
         getTemplate1: function () {
             var selectDate = this.dateOpt.year + '-' + utils.formatDate(this.dateOpt.month + 1) + '-' + utils.formatDate(this.dateOpt.date);
-            return '<div class="atie-calendar-mask"></div>' +
-                '<div class="atie-calendar" tabindex="0">' +
+            return '<div class="atie-calendar" tabindex="0">' +
                 '<div class="atie-calendar-panel">' +
                 '<div class="atie-calendar-input-wrap">' +
                 '<div class="atie-calendar-date-input-wrap">' +
@@ -319,6 +324,7 @@
         initEvent: function () {
             var self = this;
             this.elem_wrap.addEventListener('click', function (e) {
+                e.stopPropagation();
                 var target = e.target;
                 if (utils.hasClass(target, Calendar.Opt.classN)) {
                     self.openPanel(target);
@@ -336,10 +342,13 @@
                     self.turnToToday(target);
                 }
             }, false);
-            // 点击遮罩隐藏
-            this.elem_mask.addEventListener('click', function() {
+            document.addEventListener('click', function() {
                 utils.fadeOut(self.elem_wrap);
             }, false);
+            // 点击遮罩隐藏
+            // this.elem_mask.addEventListener('click', function() {
+            //     utils.fadeOut(self.elem_wrap);
+            // }, false);
             // 表单输入
             this.elem_wrap.addEventListener('input', function (e) {
                 var target = e.target;
