@@ -207,6 +207,8 @@
             for(var i=0;i<this.Opt.showArr.length;i++){
                 if(i>index) this.elem_contain.children[i].children[0].innerText = "请选择";
             }
+            // 当切换省时，且存在区域选择，置灰区域选择
+            if (index === 0 && this.Opt.showArr[2]) util.addClass(this.elem_contain.children[2], 'address-disabled'); 
             ul.parentNode.children[0].innerText = li.innerText;
 
             for(var j=0;j<ul.children.length;j++){
