@@ -361,7 +361,7 @@
             console.log('updateHtml type=>', type);
             switch (type) {
                 case 'yearChange':
-                    this.elem_wrap.querySelector('.atie-calendar-year-select').innerHTML = this.dateOpt._year + '月';
+                    this.elem_wrap.querySelector('.atie-calendar-year-select').innerHTML = this.dateOpt._year + '年';
                     this.elem_wrap.querySelector('.atie-calendar-month-select').innerHTML = this.dateOpt._month + 1 + '月';
                     break;
                 case 'monthChange':
