@@ -1,0 +1,24 @@
+{
+  "name": "@zhouatie/fanyi",
+  "version": "1.0.4",
+  "description": "a tranlate plugin",
+  "main": "./bin/www.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack --config webpack.config.js"
+  },
+  "bin": {
+    "fanyi": "./bin/www.js"
+  },
+  "keywords": [
+    "translate",
+    "node",
+    "js"
+  ],
+  "author": "zhouatie",
+  "license": "MIT",
+  "dependencies": {
+    "chalk": "^3.0.0",
+    "md5": "^2.2.1"
+  }
+}
