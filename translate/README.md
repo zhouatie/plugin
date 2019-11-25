@@ -23,6 +23,16 @@ fanyi apple
 n. 苹果，苹果树，苹果似的东西；[美俚]炸弹，手榴弹，（棒球的）球；[美俚]人，家伙。
 ```
 
+```shell
+# 翻译句子
+fanyi my name is bob
+
+---------------
+
+我叫鲍勃
+
+```
+
 ### 翻译中文
 
 ```shell
@@ -35,8 +45,16 @@ fanyi 苹果
 [园艺] apple
 ```
 
+```shell
+fanyi 我是前端工程师
+
+-----------
+
+I'm a front end engineer
+```
+
 ## TODO
 
-- [ ] 用ts编写
+- [x] 支持句子翻译
 - [ ] 加入commonader
-- [ ] 支持翻译句子
+- [ ] 支持选择多个翻译平台
