@@ -34,3 +34,9 @@ fanyi 苹果
 
 [园艺] apple
 ```
+
+## TODO
+
+- [ ] 用ts编写
+- [ ] 加入commonader
+- [ ] 支持翻译句子
