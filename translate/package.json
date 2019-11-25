@@ -1,6 +1,6 @@
 {
   "name": "@zhouatie/fanyi",
-  "version": "1.0.4",
+  "version": "1.1.3",
   "description": "a tranlate plugin",
   "main": "./bin/www.js",
   "scripts": {
@@ -20,6 +20,7 @@
   "dependencies": {
     "chalk": "^3.0.0",
     "js-sha256": "^0.9.0",
-    "md5": "^2.2.1"
+    "md5": "^2.2.1",
+    "request": "^2.88.0"
   }
 }
