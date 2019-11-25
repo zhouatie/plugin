@@ -30,9 +30,9 @@ request.get(url, (err, res) => {
   const body = JSON.parse(res.body)
 
   if (body.basic) {
-    if (body.l.startsWith('zh')) log(body.basic['phonetic'] && `${body.query} ${chalk.magenta(`[${body.basic['phonetic']}]`)}`)
+    if (body.l.startsWith('zh')) log(body.basic['phonetic'] ? `${body.query} ${chalk.magenta(`[${body.basic['phonetic']}]`)}` : '')
     else {
-      log(chalk.magenta(`${body.basic['uk-phonetic'] && `英 [${body.basic['uk-phonetic']}]`}   ${body.basic['us-phonetic'] && `美 [${body.basic['us-phonetic']}]`}`))
+      log(chalk.magenta(`${body.basic['uk-phonetic'] ? `英 [${body.basic['uk-phonetic']}]` : ''}   ${body.basic['us-phonetic'] ? `美 [${body.basic['us-phonetic']}]` : ''}`))
     }
 
     // 控制台输出
