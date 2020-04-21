@@ -1,3 +1,6 @@
+var lastselect = null;
+
+
 (function () {
     var utils = {
         addClass: function (target, className) {
@@ -33,6 +36,7 @@
             });
         },
         hide: function (target) {
+
             this.attr(target, 'isShow', 'off');
             this.css(target, {
                 display: 'none'
@@ -41,12 +45,12 @@
         formatDate: function (num) {
             return num < 10 ? '0' + num : num;
         },
-        fadeOut: function(target) {
+        fadeOut: function (target) {
             if (this.attr(target, 'isShow') == 'off') return;
             this.attr(target, 'isShow', 'off');
             var opacity = 100;
             var _this = this;
-            target.timer = setInterval(function() {
+            target.timer = setInterval(function () {
                 opacity -= opacity / 20;
                 opacity < 80 && _this.css(target, {
                     opacity: opacity / 100
@@ -58,7 +62,7 @@
                         opacity: 1
                     })
                 }
-            },10);
+            }, 10);
         },
     };
 
@@ -84,13 +88,13 @@
         this.init();
 
     };
-    Calendar.create = function(opt) {
-        for(var prop in opt){
+    Calendar.create = function (opt) {
+        for (var prop in opt) {
             Calendar.Opt[prop] = opt[prop];
         };
         var elemArr = document.getElementsByClassName(Calendar.Opt.classN);
 
-        for(var i=0;i<elemArr.length;i++){
+        for (var i = 0; i < elemArr.length; i++) {
             elemArr[i].calendar = new Calendar(elemArr[i]);
         }
     }
@@ -98,11 +102,11 @@
         PICKERNAME: 'calendar-btn',
         PANELKEY: 'self-panel-key', // 存储picker对应的calendar的唯一key
         PANELSTR: 'calendar-panel_',
-        PANELWRAPCLASS: 'calendar-wrap'
+        PANELWRAPCLASS: 'calendar-wrap1'
     }
     Calendar.Opt = {
         classN: '',
-        callBack: function(bindElem, selectDate) {}
+        callBack: function (bindElem, selectDate) { }
     };
     Calendar.version = '1.0.0';
 
@@ -111,7 +115,7 @@
         init: function () {
             var _this = this;
             this.initState();
-            this.bindElem.addEventListener('click', function(e) {
+            this.bindElem.addEventListener('click', function (e) {
                 _this.openPanel(this);
                 e.stopPropagation();
             }, false);
@@ -120,42 +124,64 @@
             if (utils.hasClass(target, Calendar.originOpt.PICKERNAME)) { // 说明该元素已经挂载
                 var only_key = utils.attr(target, Calendar.originOpt.PANELKEY);
                 this.elem_wrap = document.querySelector('.' + Calendar.originOpt.PANELSTR + only_key);
-                if (utils.attr(this.elem_wrap, 'isShow') == 'off') utils.show(this.elem_wrap);
-                else utils.fadeOut(this.elem_wrap);
-            } else {
-                this.create(target);
+                console.log(this.elem_wrap)
+
+                if (utils.attr(this.elem_wrap, 'isShow') == 'off') {
+                    utils.show(this.elem_wrap);
+                    /*        alert("222222") */
+                    if (lastselect != this.elem_wrap)
+                        utils.fadeOut(lastselect)
+                    lastselect = this.elem_wrap;
+
+                }
+                else {
+                    utils.fadeOut(this.elem_wrap)
+                  
+                    /*       alert("2") */
+                }
             }
+            else {
+                this.create(target);
+                if (lastselect == null) {
+                    lastselect = this.elem_wrap;
+                    /*      alert("4") */
+                }
+                else if (lastselect != this.elem_wrap) {
+                    utils.fadeOut(lastselect)
+                    lastselect = this.elem_wrap;
+                    /*  alert("5"); */
+                }
+            }
+
+
         },
         create: function (target) {
             var only_key = +new Date();
             var div = document.createElement('div');
-
+            utils.attr(div, 'isShow', 'on');
             utils.attr(target, Calendar.originOpt.PANELKEY, only_key);
             utils.addClass(target, Calendar.originOpt.PICKERNAME);
 
             div.className = Calendar.originOpt.PANELWRAPCLASS + ' ' + Calendar.originOpt.PANELSTR + only_key;
             div.innerHTML = this.getTemplate1() + this.getTbodyTemplate(this.dateOpt.year, this.dateOpt.month) + this.getTemplate2();
-            utils.attr(div, 'isShow', 'on');
+
             this.elem_wrap = div; // 控件容器
             this.elem_panel = div.children[0]; // 控件面板
-
             // 设置定位位置
             var elem = target;
             var top = elem.offsetTop;
             var left = elem.offsetLeft;
-            while(elem.offsetParent) {
+            while (elem.offsetParent) {
                 top += elem.offsetParent.offsetTop;
                 left += elem.offsetParent.offsetLeft;
                 elem = elem.offsetParent;
             }
-
-            utils.css(this.elem_panel,{
+            utils.css(this.elem_panel, {
                 "position": "absolute",
-                 "z-index": 2,
-                 "top": top + target.offsetHeight + 10 + "px",
-                 "left": left + "px"
+                "z-index": 2,
+                "top": top + target.offsetHeight + 10 + "px",
+                "left": left + "px"
             });
-
             this.elem_container.appendChild(div);
             this.initEvent();
         },
@@ -216,7 +242,7 @@
                 '</div>' +
                 '<div class="atie-calendar-footer">' +
                 '<span class="atie-calendar-footer-btn">' +
-                '<a class="atie-calendar-today-btn " role="button" title="'+ this.dateOpt.curYear +'年'+ (this.dateOpt.curMonth + 1) +'月'+ this.dateOpt.curDate +'日">今天</a>' +
+                '<a class="atie-calendar-today-btn " role="button" title="' + this.dateOpt.curYear + '年' + (this.dateOpt.curMonth + 1) + '月' + this.dateOpt.curDate + '日">今天</a>' +
                 '</span>' +
                 '</div>' +
                 '</div>' +
@@ -342,7 +368,7 @@
                     self.turnToToday(target);
                 }
             }, false);
-            document.addEventListener('click', function() {
+            document.addEventListener('click', function () {
                 utils.fadeOut(self.elem_wrap);
             }, false);
             // 点击遮罩隐藏
